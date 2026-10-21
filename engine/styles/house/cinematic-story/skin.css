@@ -1,0 +1,45 @@
+/* Cinematic Story v2 (B, 2026-10-07): Creative Flo's Archivo, but soft-edged and heavier, like type shot through a lens.
+   Video is graded before it gets here (grade.txt). */
+@font-face{font-family:"Archivo";src:url(assets/fonts/Archivo-var.ttf) format("truetype");font-weight:100 900;font-stretch:62% 125%}
+@font-face{font-family:"Roboto Mono";src:url(assets/fonts/RobotoMono-400.ttf) format("truetype");font-weight:400}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0B0A08;
+  --ink:#0B0A08;--paper:#EFE7D8;--gold:#F5C542;--film:#F7F3EA;--muted:#6B5F4C;
+  --f-card:"Archivo",Arial,sans-serif;--f-mono:"Roboto Mono",Menlo,monospace}
+#plate{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}
+
+/* captions: one line, Archivo 900 wide, uppercase, soft halo edge (not a crisp vector edge) */
+.sub{position:absolute;left:60px;right:60px;top:1372px;text-align:center;font:900 50px/1.1 var(--f-card);font-stretch:118%;
+  text-transform:uppercase;letter-spacing:.01em;color:var(--film);filter:blur(.45px);
+  -webkit-text-stroke:.6px rgba(247,243,234,.55);
+  text-shadow:0 0 2px rgba(255,248,232,.75),0 0 16px rgba(255,236,200,.28),0 4px 14px rgba(0,0,0,.7)}
+
+/* gold word cards: heavier, glowing, slightly out-of-focus edge */
+.card{position:absolute;left:50px;right:50px;top:196px;text-align:center}
+.card b{display:inline-block;font:900 112px/.92 var(--f-card);font-stretch:118%;text-transform:uppercase;color:var(--gold);
+  letter-spacing:-.005em;filter:blur(.7px);-webkit-text-stroke:2px var(--gold);
+  text-shadow:0 0 3px rgba(245,197,66,.9),0 0 28px rgba(245,197,66,.42),0 10px 34px rgba(0,0,0,.55)}
+
+/* book title on a paper card */
+.paper{position:absolute;left:120px;right:120px;top:210px;padding:36px 38px 34px;background:var(--paper);
+  background-image:linear-gradient(rgba(11,10,8,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(11,10,8,.06) 1px,transparent 1px);
+  background-size:36px 36px;box-shadow:0 26px 54px rgba(0,0,0,.5);transform:rotate(-2deg)}
+.paper .lb{font:400 22px var(--f-mono);letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+.paper .tt{margin-top:14px;font:900 74px/.95 var(--f-card);font-stretch:112%;text-transform:uppercase;color:var(--ink);filter:blur(.35px)}
+.paper .tt em{font-style:normal;color:#A87C12}
+
+/* full-frame quote: a paper sheet on a dark desk, words light up as B reads them */
+.desk{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 40%,#2a241c 0%,#0e0c0a 70%)}
+.desk .sheet{position:absolute;left:70px;right:70px;top:330px;padding:60px 56px 64px;background:var(--paper);
+  background-image:linear-gradient(rgba(11,10,8,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(11,10,8,.05) 1px,transparent 1px);
+  background-size:40px 40px;box-shadow:0 40px 80px rgba(0,0,0,.6);transform:rotate(-1.2deg)}
+.desk .lb{font:400 24px var(--f-mono);letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+.desk .qt{margin-top:26px;font:800 74px/1.1 var(--f-card);font-stretch:100%;color:var(--ink);filter:blur(.3px)}
+
+/* end tag */
+.endtag{position:absolute;inset:0;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px}
+.endtag img{width:420px;height:auto}
+.endtag .tl{font:900 64px var(--f-card);font-stretch:118%;text-transform:uppercase;color:var(--film);filter:blur(.4px);
+  text-shadow:0 0 18px rgba(255,236,200,.25)}
+.endtag .hd{font:400 26px var(--f-mono);letter-spacing:.3em;color:var(--gold)}

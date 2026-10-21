@@ -1,0 +1,30 @@
+{
+  "client": "screen-tutorial",
+  "brand": "Screen Tutorial",
+  "handle": "",
+  "look": "look-whiteboard",
+  "type": "type-bebas",
+  "display": "Bebas Neue",
+  "body": "Montserrat",
+  "caption": "cap-boxed",
+  "transition": "hard",
+  "transition_id": "tr-hardcut",
+  "grade": "grade-natural",
+  "density": "density-balanced",
+  "accent": "#2F6BFF",
+  "highlight": "#FFE14D",
+  "base": "#1F2A44",
+  "card": "paper",
+  "logo": "",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)",
+    "Horizontal 16:9 (YouTube)"
+  ],
+  "tagline": "",
+  "music": [
+    "Minimal lo-fi",
+    "Upbeat pop / indie"
+  ],
+  "pace": 6,
+  "oncam": "Mostly visuals, my voice"
+}

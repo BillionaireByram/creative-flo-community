@@ -1,0 +1,1 @@
+Montserrat: https://github.com/google/fonts (SIL OFL / Apache, license in that repo)

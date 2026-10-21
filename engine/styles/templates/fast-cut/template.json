@@ -1,0 +1,42 @@
+{
+  "key": "fast-cut",
+  "name": "Fast Cut Talking Head",
+  "summary": "Zero dead air. Jump cuts on every pause, framing that changes scale every 1-2 seconds, karaoke-glow captions, and clean glowing cards that slide in above the head to prove each point.",
+  "best_for": "Creators, marketers, consultants and tech or business educators filming one talking-head setup. Tips, hot takes, frameworks and list videos from 20 to 60 seconds.",
+  "why_it_works": "Removing every pause over 0.15s and alternating 100% and 115% framing creates a visual change every 1.2-2s, which resets attention before the viewer reaches for the swipe. The open loop in seconds 1-3 (the third one is the one nobody does) makes them stay for the payoff. Karaoke captions let the eye track the voice at 3-4 words per second. A takeover card every 6-8s is the pattern interrupt, and the payoff punch-in rewards the wait.",
+  "tags": [
+    "talking head",
+    "jump cuts",
+    "high retention",
+    "glow cards",
+    "tips",
+    "creator",
+    "tech"
+  ],
+  "sort": 20,
+  "preview": {
+    "palette": [
+      "#0A0E14",
+      "#37BDF8",
+      "#F5D82A",
+      "#F0EEE9",
+      "#FF3B30"
+    ],
+    "fonts": [
+      "Montserrat"
+    ],
+    "caption_sample": "THE THIRD ONE\nNOBODY DOES",
+    "caption_style": "Karaoke glow",
+    "transitions": [
+      "Punch-in + flash",
+      "Zoom blur",
+      "Hard cuts only"
+    ],
+    "music_beds": [
+      "Upbeat pop / indie",
+      "Synthwave / electronic"
+    ],
+    "pace": 5,
+    "motion_sample": "A face placeholder jump-cuts between 100% and 115% scale every second while a glowing blue glass pill glides into the top band and a two-line caption lights word by word in yellow glow."
+  }
+}

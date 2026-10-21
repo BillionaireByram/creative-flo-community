@@ -1,0 +1,23 @@
+{
+  "palette": [
+    "#0B0A08",
+    "#EFE7D8",
+    "#F5C542",
+    "#F7F3EA"
+  ],
+  "fonts": [
+    "Inter Italic",
+    "Inter ExtraBold Italic",
+    "Inter Black"
+  ],
+  "caption_sample": "and this ONE QUOTE",
+  "caption_style": "Kinetic italic captions: every word lands on its spoken word, light italic small words, bold italic hero word in gold, blocks beside the speaker",
+  "transitions": [
+    "Hard cut on phrase changes",
+    "Explainer scene cut on the spoken word"
+  ],
+  "music_beds": [
+    "Chill-hop instrumental (chill-a), low under the voice"
+  ],
+  "pace": 5
+}

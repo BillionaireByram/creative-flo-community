@@ -1,0 +1,29 @@
+{
+  "client": "podcast-clip",
+  "brand": "Podcast Clip",
+  "handle": "",
+  "look": "look-ugc",
+  "type": "type-instrument",
+  "display": "Instrument Serif",
+  "body": "Archivo",
+  "caption": "cap-lower",
+  "transition": "hard",
+  "transition_id": "tr-hardcut",
+  "grade": "grade-kodak",
+  "density": "density-minimal",
+  "accent": "#FF5A36",
+  "highlight": "#FFFFFF",
+  "base": "#111111",
+  "card": "minimal",
+  "logo": "",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "tagline": "",
+  "music": [
+    "No music",
+    "Minimal lo-fi"
+  ],
+  "pace": 5,
+  "oncam": "Face the whole time"
+}

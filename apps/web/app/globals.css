@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Creative Flo palette = Creative Flo brand foundation v4 (approved 2026-09-08):
+   obsidian #070A12, panel #0D131D, ink #F3F5F8, muted #A9B6C8, Electric Flo blue #00A0FF,
+   ice #79C8FF, amber #FFB869, deep blue #0066FF. Montserrat + Roboto Mono. */
+:root,
+[data-theme="dark"] {
+  /* Background: obsidian and its panel steps */
+  --bg-primary: #070A12;
+  --bg-secondary: #0D131D;
+  --bg-tertiary: #121A27;
+  --bg-elevated: #172131;
+  --bg-hover: #1C2839;
+
+  /* Borders: blue-tinted hairlines */
+  --border-primary: #1F2B3D;
+  --border-secondary: #172232;
+  --border-focus: #00A0FF;
+
+  /* Text */
+  --text-primary: #F3F5F8;
+  --text-secondary: #A9B6C8;
+  --text-tertiary: #67758A;
+  --text-inverse: #070A12;
+
+  /* Accent: Electric Flo blue, ice on hover */
+  --accent: #00A0FF;
+  --accent-hover: #79C8FF;
+  --accent-muted: #08243D;
+
+  /* Status: amber carries warnings and highlights */
+  --status-success: #00D26A;
+  --status-warning: #FFB869;
+  --status-error: #FF4D4D;
+  --status-info: #79C8FF;
+
+  /* Brand extras */
+  --brand-amber: #FFB869;
+  --brand-ice: #79C8FF;
+  --brand-deep: #0066FF;
+
+  /* Brand fonts load in the browser, with system faces while offline. */
+  --font-sans: "Montserrat", system-ui, -apple-system, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, monospace;
+
+  /* Spacing rhythm */
+  --space-unit: 4px;
+
+  /* Radius: brand small 12 / card 18 */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 18px;
+}
+
+[data-theme="light"] {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F3F5F8;
+  --bg-tertiary: #E9EDF3;
+  --bg-elevated: #FFFFFF;
+  --bg-hover: #E2E8F0;
+
+  --border-primary: #D8DFE9;
+  --border-secondary: #C9D2DF;
+  --border-focus: #0066FF;
+
+  --text-primary: #070A12;
+  --text-secondary: #4A5668;
+  --text-tertiary: #7D8899;
+  --text-inverse: #FFFFFF;
+
+  --accent: #0066FF;
+  --accent-hover: #00A0FF;
+  --accent-muted: #E3EEFF;
+
+  --status-success: #00A859;
+  --status-warning: #D9822B;
+  --status-error: #E03E3E;
+  --status-info: #0066FF;
+}
+
+/* The brand's restrained light columns: soft blue and amber verticals behind the dark app. */
+:root:not([data-theme="light"]) body {
+  background-color: var(--bg-primary);
+  background-image:
+    linear-gradient(90deg, transparent 6%, rgba(0, 160, 255, 0.07) 9%, transparent 13%),
+    linear-gradient(90deg, transparent 84%, rgba(255, 184, 105, 0.05) 88%, transparent 92%),
+    radial-gradient(60% 40% at 0% 0%, rgba(0, 160, 255, 0.10), transparent 70%);
+  background-attachment: fixed;
+}
+
+@layer base {
+  * {
+    border-color: var(--border-primary);
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-primary);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: var(--accent-muted);
+    color: var(--text-primary);
+  }
+}
+
+/*
+ * The logo owns its filter. Tailwind v3 flattens the @tailwind directives at build
+ * time and emits no @layer at-rules, so nothing here gains layer priority. What keeps
+ * these ahead of a utility is specificity — two selectors against a utility's one —
+ * plus sitting after the utilities @tailwind emits. That covers bare utilities only:
+ * a variant-prefixed one (hover:, group-hover:, peer-*) is emitted later at equal or
+ * higher specificity and would still win, which is why callers pass sizing and layout
+ * classes only.
+ *
+ * Dark is the unscoped default so it matches :root at the top of this file: a document
+ * that never received a data-theme is painted with the dark palette, and the mark has
+ * to be legible against it.
+ */
+[data-theme="light"] .themed-default-logo { filter: none; }
+:root:not([data-theme="light"]) .themed-default-logo { filter: none; }
+[data-theme="light"] .themed-logo-on-dark, :root:not([data-theme="light"]) .themed-logo-on-light { display: none; }
+
+@layer components {
+
+  /* Smooth focus ring for interactive elements */
+  .focus-ring {
+    @apply outline-none ring-0 transition-shadow duration-150;
+  }
+  .focus-ring:focus-visible {
+    @apply ring-2 ring-[var(--accent)] ring-offset-1 ring-offset-[var(--bg-primary)];
+  }
+
+  /* Glass card effect */
+  .glass-card {
+    @apply rounded-xl border border-[var(--border-primary)] bg-[var(--bg-secondary)] backdrop-blur-md shadow-lg;
+  }
+
+  /* Skeleton shimmer gradient */
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--bg-secondary) 0%,
+      var(--bg-tertiary) 50%,
+      var(--bg-secondary) 100%
+    );
+    background-size: 200% 100%;
+  }
+}
+
+@layer utilities {
+
+  /* Safe-area helpers.
+   *
+   * These are only non-zero once the viewport is `viewport-fit=cover`, which
+   * the root layout sets. Without it iOS resolves every env(safe-area-inset-*)
+   * to 0, so padding written against them looks present in the source and does
+   * nothing at runtime. That trap is why `cover` and these landed together.
+   *
+   * max() rather than the raw env(): most of these surfaces already want some
+   * padding of their own, and on a device with no inset the env() is 0, which
+   * would otherwise remove it. */
+  .pb-safe { padding-bottom: max(var(--ff-pb, 0px), env(safe-area-inset-bottom)); }
+  .pt-safe { padding-top: max(var(--ff-pt, 0px), env(safe-area-inset-top)); }
+  .pl-safe { padding-left: max(var(--ff-pl, 0px), env(safe-area-inset-left)); }
+  .pr-safe { padding-right: max(var(--ff-pr, 0px), env(safe-area-inset-right)); }
+
+  /* For an element positioned against an edge rather than padded away from it. */
+  .bottom-safe { bottom: calc(var(--ff-bottom, 0px) + env(safe-area-inset-bottom)); }
+  .right-safe { right: calc(var(--ff-right, 0px) + env(safe-area-inset-right)); }
+  .left-safe { left: calc(var(--ff-left, 0px) + env(safe-area-inset-left)); }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ---- Touch (phones, iPad) -------------------------------------------------
+ * Primary pointer is a finger. Three things iOS does by default that make the
+ * app feel broken, switched off here once instead of per component. */
+
+/* 1. A tap on a control is a tap: no 300ms wait for a possible double-tap zoom. */
+a, button, input, select, textarea, label, summary,
+[role="button"], [role="tab"], [role="menuitem"], [role="option"], [role="slider"], [role="checkbox"], [role="switch"] {
+  touch-action: manipulation;
+}
+
+@media (pointer: coarse) {
+  /* 2. iOS zooms the whole page when a focused field's text is under 16px. Every
+   *    field reads 16px on a touch device; desktop keeps its own sizes. A field
+   *    deliberately set larger opts out with data-keep-font. */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]):not([data-keep-font]),
+  textarea:not([data-keep-font]),
+  select:not([data-keep-font]),
+  [contenteditable="true"]:not([data-keep-font]) {
+    font-size: 16px !important;
+  }
+
+  /* 3. Long-pressing a card opens selection, not iOS's link/image preview and text callout. */
+  [data-touch-card] {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+@layer utilities {
+  /* A finger-sized hit area (44px, Apple HIG) around a control that is drawn
+   * smaller. The ::after grows to 44px on each axis where the box is smaller and
+   * is invisible, so the layout and the look stay as designed. The element must
+   * be positioned (relative/absolute/fixed) and must not clip its overflow.
+   * Only on coarse pointers; a mouse keeps the drawn size. */
+  @media (pointer: coarse) {
+    .tap-target::after {
+      content: "";
+      position: absolute;
+      top: min(0px, calc((100% - 44px) / 2));
+      bottom: min(0px, calc((100% - 44px) / 2));
+      left: min(0px, calc((100% - 44px) / 2));
+      right: min(0px, calc((100% - 44px) / 2));
+    }
+  }
+}

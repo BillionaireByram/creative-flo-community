@@ -1,0 +1,30 @@
+name: Engine check
+on:
+  push:
+    paths: ["engine/**", ".github/workflows/engine-check.yml"]
+  pull_request:
+    paths: ["engine/**", ".github/workflows/engine-check.yml"]
+permissions:
+  contents: read
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: engine/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run demo
+      - run: node scripts/preflight.mjs video-projects/demo
+      - run: npx hyperframes lint video-projects/demo

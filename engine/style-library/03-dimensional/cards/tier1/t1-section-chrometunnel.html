@@ -1,0 +1,279 @@
+<!doctype html>
+<!--
+  DIMENSIONAL · tier1 · section · CHROMETUNNEL
+  Full-screen chapter takeover. A tunnel of screen-cards recedes into black while
+  a polished chrome word turns slowly in the throat of it. Reads as "here is the
+  subject, and here is everything it contains".
+
+  How the depth is built: three rings of eight cards. Each card is rotated around
+  Z to its position on the ring, pushed out by the ring radius, then pushed back
+  in Z. The whole scene counter-rotates slowly so the rings shear against each
+  other, which is what sells it as a tunnel rather than a flat wheel.
+
+  The chrome is a background-clip gradient plus a stack of 1px text-shadows
+  stepping down and away — a cheap extrusion that holds up at 1080p because the
+  word is large and the camera never gets close enough to show the stepping.
+
+  Slots: kicker (~22 chars), headline (~14 chars — ONE word reads best).
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../tokens.css" />
+    <style>
+      html, body { margin: 0; background: var(--canvas-deep); }
+
+      #t1-section-chrometunnel {
+        position: absolute; inset: 0; width: 1920px; height: 1080px;
+        background: var(--canvas); color: var(--text);
+        font-family: var(--font-display); overflow: hidden;
+      }
+
+      /* The throat — a black well the tunnel recedes into, so the far cards
+         have something to disappear against rather than just fading out. */
+      #t1-section-chrometunnel .throat {
+        position: absolute; left: 50%; top: 50%;
+        width: 1500px; height: 1500px; margin: -750px 0 0 -750px;
+        background: radial-gradient(circle at 50% 50%,
+          var(--canvas-deep) 0%, var(--canvas-deep) 18%, transparent 56%);
+        z-index: 2;
+      }
+
+      #t1-section-chrometunnel .scene {
+        position: absolute; inset: 0; z-index: 3;
+        perspective: var(--persp-near);
+        perspective-origin: 50% 50%;
+      }
+      #t1-section-chrometunnel .rings {
+        position: absolute; left: 50%; top: 50%;
+        transform-style: preserve-3d;
+      }
+      #t1-section-chrometunnel .ring {
+        position: absolute; left: 0; top: 0;
+        transform-style: preserve-3d;
+      }
+
+      /* One screen-card on the ring. The inner holds the fake UI so the outer
+         can own the ring placement transform without fighting it. */
+      #t1-section-chrometunnel .tile {
+        position: absolute; left: 0; top: 0;
+        width: 196px; height: 116px; margin: -58px 0 0 -98px;
+        transform-style: preserve-3d;
+      }
+      #t1-section-chrometunnel .tile .face {
+        position: absolute; inset: 0;
+        border-radius: 9px;
+        background:
+          linear-gradient(160deg, rgba(255,255,255,0.13), rgba(255,255,255,0.03) 60%),
+          var(--canvas-deep);
+        border: 1px solid var(--surface-edge);
+        box-shadow:
+          0 0 0 1px rgba(var(--fringe-cool-rgb), 0.16),
+          0 18px 42px rgba(0, 0, 0, 0.75);
+        overflow: hidden;
+      }
+      /* Fake screenshot content: a warm band and two bars. Enough to read as
+         "a video frame" at this size without shipping any real imagery. */
+      #t1-section-chrometunnel .tile .band {
+        position: absolute; left: 0; right: 0; top: 18%; height: 44%;
+        background: linear-gradient(92deg, #c2563a, #d98b4a 38%, #7b8ea8 72%, #35506e);
+        opacity: 0.85;
+      }
+      #t1-section-chrometunnel .tile .bar {
+        position: absolute; left: 12px; height: 7px; border-radius: 4px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+      #t1-section-chrometunnel .tile .bar.a { bottom: 20px; width: 92px; }
+      #t1-section-chrometunnel .tile .bar.b { bottom: 9px;  width: 54px; opacity: 0.55; }
+      /* The warm/cool pair that makes the whole frame feel lens-shot. */
+      #t1-section-chrometunnel .tile .fringe {
+        position: absolute; inset: -1px; border-radius: 10px; pointer-events: none;
+        box-shadow:
+          calc(var(--fringe-offset) * -1) 0 0 rgba(var(--fringe-warm-rgb), 0.30),
+          var(--fringe-offset) 0 0 rgba(var(--fringe-cool-rgb), 0.30);
+        mix-blend-mode: screen;
+      }
+
+      /* --- the word -------------------------------------------------------- */
+      #t1-section-chrometunnel .wordwrap {
+        position: absolute; inset: 0; z-index: 4;
+        display: flex; align-items: center; justify-content: center;
+        perspective: var(--persp);
+      }
+      #t1-section-chrometunnel .headline {
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: 190px;
+        line-height: 0.86;
+        letter-spacing: var(--tracking-display);
+        text-transform: uppercase;
+        white-space: nowrap;
+
+        background: var(--chrome-ramp);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+
+        /* cheap extrusion: steps away from the light, then a contact shadow */
+        text-shadow:
+          1px 1px 0 rgba(0,0,0,0.22),
+          2px 2px 0 rgba(0,0,0,0.18),
+          3px 3px 0 rgba(0,0,0,0.14),
+          4px 4px 0 rgba(0,0,0,0.10),
+          5px 5px 0 rgba(0,0,0,0.07),
+          0 22px 54px rgba(0,0,0,0.8);
+        transform: rotateX(8deg) rotateZ(-90deg);
+        transform-origin: 50% 50%;
+      }
+      /* Specular sweep — a bright band that travels across the metal once. */
+      #t1-section-chrometunnel .spec {
+        position: absolute; left: 50%; top: 50%;
+        width: 300px; height: 1300px; margin: -650px 0 0 -150px;
+        background: linear-gradient(90deg,
+          transparent, rgba(255,255,255,0.72) 46%, rgba(255,255,255,0.9) 50%,
+          rgba(255,255,255,0.72) 54%, transparent);
+        filter: blur(26px);
+        mix-blend-mode: overlay;
+        z-index: 5; pointer-events: none;
+      }
+
+      #t1-section-chrometunnel .kicker {
+        position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%);
+        z-index: 6;
+        font-family: var(--font-mono); font-size: 21px; font-weight: 700;
+        letter-spacing: var(--tracking-micro); text-transform: uppercase;
+        color: var(--text-dim);
+      }
+      #t1-section-chrometunnel .kicker::before,
+      #t1-section-chrometunnel .kicker::after {
+        content: ""; position: absolute; top: 50%; width: 54px; height: 1px;
+        background: var(--text-faint);
+      }
+      #t1-section-chrometunnel .kicker::before { left: -72px; }
+      #t1-section-chrometunnel .kicker::after  { right: -72px; }
+
+      #t1-section-chrometunnel .vignette {
+        position: absolute; inset: 0; z-index: 7; pointer-events: none;
+        background: var(--vignette);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="t1-section-chrometunnel" data-composition-id="t1-section-chrometunnel" data-start="0" data-width="1920" data-height="1080">
+      <div class="scene">
+        <div class="rings" id="ct-rings"></div>
+      </div>
+      <div class="throat"></div>
+
+      <div class="wordwrap">
+        <div class="headline" data-slot="headline">Graphics</div>
+      </div>
+      <div class="spec"></div>
+
+      <div class="kicker" data-slot="kicker">Chapter 02</div>
+      <div class="vignette"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+
+      /* Build the rings. Deterministic: every value below is derived from the
+         loop indices, so the same frame renders the same way every time. */
+      (function buildRings() {
+        const host = document.getElementById("ct-rings");
+        const RINGS = [
+          { radius: 430, z: -120, count: 8, scale: 1.00, tilt: 0 },
+          { radius: 560, z: -520, count: 8, scale: 0.86, tilt: 22.5 },
+          { radius: 700, z: -940, count: 8, scale: 0.70, tilt: 45 },
+        ];
+        const div = (cls) => {
+          const d = document.createElement("div");
+          d.className = cls;
+          return d;
+        };
+        RINGS.forEach((ring, ri) => {
+          const r = div("ring");
+          r.dataset.ring = String(ri);
+          r.style.transform = `translateZ(${ring.z}px)`;
+          for (let i = 0; i < ring.count; i++) {
+            const angle = (360 / ring.count) * i + ring.tilt;
+            const tile = div("tile");
+            tile.style.transform =
+              `rotateZ(${angle}deg) translateY(${-ring.radius}px) rotateZ(${-angle}deg) scale(${ring.scale})`;
+            const face = div("face");
+            face.appendChild(div("band"));
+            face.appendChild(div("bar a"));
+            face.appendChild(div("bar b"));
+            tile.appendChild(face);
+            tile.appendChild(div("fringe"));
+            r.appendChild(tile);
+          }
+          host.appendChild(r);
+        });
+      })();
+
+      /* Fit the word to the frame. The headline is rotated 90deg, so its LENGTH
+         runs down the 1080px axis: a long slot value would otherwise be cropped
+         top and bottom. Measuring and scaling once keeps the card safe for any
+         value Agent 3 fills, and is deterministic because it depends only on
+         the text and the font, never on time or chance. */
+      /* Fit the word to the frame. The headline is rotated 90deg, so its LENGTH
+         runs down the 1080px axis: a long slot value would otherwise be cropped
+         top and bottom. Deterministic — it depends only on the text and the
+         font, never on time or chance.
+
+         It waits for document.fonts.ready first. Measuring before the webfont
+         lands measures the fallback face, which has different metrics, and the
+         word ends up clipped anyway. */
+      function fitHeadline() {
+        const el = document.querySelector("#t1-section-chrometunnel .headline");
+        if (!el) return;
+        const BUDGET = 860;            /* px of the 1080 axis we allow */
+        const base = 190;              /* must match the CSS font-size */
+        el.style.fontSize = base + "px";
+        const w = el.scrollWidth;
+        if (w > BUDGET) el.style.fontSize = Math.floor(base * (BUDGET / w)) + "px";
+      }
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitHeadline);
+      } else {
+        fitHeadline();
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      const ID = "#t1-section-chrometunnel";
+
+      /* The tunnel rushes in from far away and settles. */
+      tl.from(`${ID} .rings`, { z: -1500, autoAlpha: 0, duration: 1.6, ease: "expo.out" }, 0);
+
+      /* Each ring turns at its own rate so they shear against each other. */
+      tl.to(`${ID} .ring[data-ring="0"]`, { rotateZ:  26, duration: 14, ease: "none" }, 0);
+      tl.to(`${ID} .ring[data-ring="1"]`, { rotateZ: -34, duration: 14, ease: "none" }, 0);
+      tl.to(`${ID} .ring[data-ring="2"]`, { rotateZ:  42, duration: 14, ease: "none" }, 0);
+
+      /* Tiles fade up in ring order, outermost last. */
+      tl.from(`${ID} .ring[data-ring="0"] .tile`, { autoAlpha: 0, duration: 0.7, stagger: 0.045, ease: "power2.out" }, 0.25)
+        .from(`${ID} .ring[data-ring="1"] .tile`, { autoAlpha: 0, duration: 0.7, stagger: 0.04,  ease: "power2.out" }, 0.45)
+        .from(`${ID} .ring[data-ring="2"] .tile`, { autoAlpha: 0, duration: 0.7, stagger: 0.035, ease: "power2.out" }, 0.62);
+
+      /* The word arrives late, big and slow, and keeps turning. */
+      tl.from(`${ID} .headline`, {
+        autoAlpha: 0, scale: 2.4, rotateZ: -140, filter: "blur(26px)",
+        duration: 1.8, ease: "expo.out",
+      }, 0.5);
+      tl.to(`${ID} .headline`, { rotateZ: -84, duration: 13, ease: "none" }, 1.0);
+
+      /* One specular pass across the metal, then it is gone. */
+      tl.fromTo(`${ID} .spec`,
+        { x: -1200, autoAlpha: 0 },
+        { x: 1200, autoAlpha: 1, duration: 2.2, ease: "sine.inOut" }, 1.5)
+        .to(`${ID} .spec`, { autoAlpha: 0, duration: 0.5, ease: "power1.out" }, 3.4);
+
+      tl.from(`${ID} .kicker`, { autoAlpha: 0, y: 18, duration: 0.8, ease: "power3.out" }, 1.4);
+
+      window.__timelines["t1-section-chrometunnel"] = tl;
+    </script>
+  </body>
+</html>

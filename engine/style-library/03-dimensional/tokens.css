@@ -1,0 +1,89 @@
+/* ============================================================================
+   DIMENSIONAL — style tokens
+   Single source of palette / type / motion / texture for every card in this
+   style. Cards reference these vars and never hardcode colors, fonts, easings
+   or glows. Tweak here, all cards update. See DESIGN.md for the why.
+
+   Aesthetic: objects in space. Where Kallaway glows and Vox prints flat, this
+   style has DEPTH — real CSS perspective, things that recede, polished chrome
+   type that catches a light, and thin instrument linework with a faint RGB
+   fringe as if shot through a lens. Near-black canvas so the dimensionality
+   reads; colour is almost absent, because the chrome and the fringe ARE the
+   colour.
+   ============================================================================ */
+
+/* Type. The HyperFrames compiler embeds supported fonts by name at render time;
+   this @import is what makes standalone / browser preview show the right faces. */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,500;0,600;0,700;0,800;0,900;1,700;1,900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
+
+:root {
+  /* --- palette (mirror style.json + DESIGN.md) --------------------------- */
+  --canvas:       #050507;   /* near-black, very slightly cool */
+  --canvas-deep:  #000000;   /* true black — vignette floor, tunnel throat */
+  --text:         #FFFFFF;
+  --text-dim:     rgba(255, 255, 255, 0.58);
+  --text-faint:   rgba(255, 255, 255, 0.28);
+
+  /* Chrome. Not one colour but a ramp — the illusion is entirely in the stops,
+     light on top, a hard mid break, light again at the base. Keep the break
+     sharp; soften it and the metal turns to plastic. */
+  --chrome-hi:    #FFFFFF;
+  --chrome-1:     #E8EDF4;
+  --chrome-mid:   #AEB8C6;
+  --chrome-lo:    #7C8694;
+  --chrome-base:  #D6DEE8;
+  --chrome-ramp: linear-gradient(
+    177deg,
+    var(--chrome-1) 0%,
+    var(--chrome-hi) 18%,
+    var(--chrome-1) 36%,
+    var(--chrome-mid) 47%,
+    var(--chrome-lo) 50%,
+    var(--chrome-mid) 53%,
+    var(--chrome-1) 64%,
+    var(--chrome-hi) 82%,
+    var(--chrome-base) 100%
+  );
+
+
+  /* Lens fringe. Two offsets, warm one way and cool the other, always applied
+     as a PAIR at low opacity. One alone reads as a mistake. */
+  --fringe-warm:  #FF3B30;
+  --fringe-cool:  #0A84FF;
+  --fringe-warm-rgb: 255, 59, 48;
+  --fringe-cool-rgb: 10, 132, 255;
+  --fringe-offset: 2px;
+
+  /* The one accent, used sparingly: instrument white-blue for live readouts. */
+  --accent:       #79C8FF;
+  --accent-rgb:   121, 200, 255;
+
+  /* --- typography -------------------------------------------------------- */
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body:    "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    "Space Mono", ui-monospace, monospace;
+
+  --tracking-display: -0.045em;  /* heavy display type sets tight */
+  --tracking-micro:    0.24em;   /* mono labels set wide */
+
+  /* --- depth ------------------------------------------------------------- */
+  /* One perspective value across the style so separate cards feel like the
+     same room. Change it here, not per card. */
+  --persp:        1400px;
+  --persp-near:   900px;         /* tighter, more aggressive falloff */
+  --card-radius:  14px;
+  --surface:      rgba(255, 255, 255, 0.055);
+  --surface-edge: rgba(255, 255, 255, 0.14);
+
+  /* --- motion ------------------------------------------------------------ */
+  /* Heavy things move slowly and settle. Nothing in this style snaps. */
+  --ease-glide:   power3.out;    /* default entrance */
+  --ease-settle:  expo.out;      /* long decel for big objects */
+  --ease-drift:   sine.inOut;    /* idle float */
+  --dur-in:       1.2;
+  --dur-hold:     0.6;
+
+  /* --- texture ----------------------------------------------------------- */
+  --vignette: radial-gradient(130% 100% at 50% 45%, transparent 38%, rgba(0,0,0,0.55) 78%, rgba(0,0,0,0.88) 100%);
+  --grain-size: 160px;
+}

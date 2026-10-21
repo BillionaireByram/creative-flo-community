@@ -1,0 +1,4 @@
+/* Story Explainer (B, 2026-10-08). Tokens only: kinetic captions come from pipeline/kinetic.py (theme "italic") and the
+   explainer scenes from pipeline/explainkit.py, which emit their own CSS. Video is graded first (grade.txt). */
+#root{--base:#0B0A08;--paper:#EFE7D8;--gold:#F5C542;--film:#F7F3EA;background:var(--base)}
+#plate{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}

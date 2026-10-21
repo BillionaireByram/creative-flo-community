@@ -1,0 +1,23 @@
+{
+  "palette": [
+    "#0B0A08",
+    "#F2EADB",
+    "#F5C542",
+    "#F7F3EA"
+  ],
+  "fonts": [
+    "Archivo (soft edge)",
+    "Roboto Mono"
+  ],
+  "caption_sample": "So the book is called Happy Pocket Full of Money.",
+  "caption_style": "One-line uppercase Archivo with a soft halo; gold word cards with an out-of-focus edge",
+  "transitions": [
+    "Hard cut on phrase changes",
+    "Paper card",
+    "One soft light leak on emotional beats"
+  ],
+  "music_beds": [
+    "Chill-hop instrumental (chill-a), low under story"
+  ],
+  "pace": 5
+}

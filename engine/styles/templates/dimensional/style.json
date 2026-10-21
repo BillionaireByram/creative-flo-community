@@ -1,0 +1,29 @@
+{
+  "client": "dimensional",
+  "brand": "Dimensional Motion",
+  "handle": "",
+  "look": "look-hud",
+  "type": "type-michroma",
+  "display": "Michroma",
+  "body": "Manrope",
+  "caption": "cap-hud",
+  "transition": "flash",
+  "transition_id": "tr-zoomblur",
+  "grade": "grade-bleach",
+  "density": "density-balanced",
+  "accent": "#79C8FF",
+  "highlight": "#FFFFFF",
+  "base": "#050507",
+  "card": "hud",
+  "logo": "",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "tagline": "",
+  "music": [
+    "Synthwave / electronic",
+    "Cinematic score"
+  ],
+  "pace": 4,
+  "oncam": "Face + heavy B-roll"
+}

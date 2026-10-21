@@ -1,0 +1,42 @@
+{
+  "key": "clean-authority",
+  "name": "Clean Authority",
+  "summary": "Expensive by subtraction. Slow confident cuts, lots of empty space, black and white with one touch of gold, quiet film subtitles and one serif statement per point. Built to make a calm speaker the most credible voice in the feed.",
+  "best_for": "High-ticket consultants, advisors, wealth and legal professionals, luxury real estate, executive coaches and premium agencies. 30-90 second point-of-view pieces where trust matters more than hype.",
+  "why_it_works": "In a feed of loud edits, stillness is the pattern interrupt: a calm contrarian line with one gold word stops the scroll on contrast alone. Long 3-6s holds signal confidence and let the viewer judge the person, which builds trust. A new idea every 5-8s gives the brain time to agree with each point. Whole-phrase subtitles read like film, and the single color teaches the eye exactly where the important word is.",
+  "tags": [
+    "premium",
+    "minimal",
+    "luxury",
+    "consulting",
+    "black and white",
+    "trust",
+    "executive"
+  ],
+  "sort": 60,
+  "preview": {
+    "palette": [
+      "#0E0E0E",
+      "#F2EDE4",
+      "#C9A96E",
+      "#2A2A2A",
+      "#8A8A8A"
+    ],
+    "fonts": [
+      "Cormorant Garamond",
+      "Manrope"
+    ],
+    "caption_sample": "Clarity is the rarest skill in business.",
+    "caption_style": "Film subtitle",
+    "transitions": [
+      "Match cut",
+      "Hard cuts only"
+    ],
+    "music_beds": [
+      "Minimal lo-fi",
+      "Cinematic score"
+    ],
+    "pace": 1,
+    "motion_sample": "On black, three lines of spaced serif capitals rise slowly through a mask beside an empty frame, a thin gold rule draws underneath, and a quiet subtitle fades in at the bottom."
+  }
+}

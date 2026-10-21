@@ -1,0 +1,43 @@
+{
+  "key": "documentary",
+  "name": "Mini Documentary",
+  "summary": "A one-minute film: voiceover over real B-roll, a warm film grade, music that carries the emotion, natural sound moments, and serif chapter cards that turn one story into acts.",
+  "best_for": "Origin stories, how-it's-made pieces, client transformations and case studies, restaurants, makers, travel and nonprofits. 45-120 second pieces built from voiceover plus real footage.",
+  "why_it_works": "A cold open on the most striking moment (the result or the low point) creates a question in the first 3s that only the story answers. Chapter cards every 12-30s set up acts, so the viewer always knows a turn is coming. Cutting to the music beat every 1.5-3.5s keeps momentum without hype, and natural-sound breaks every 10-15s reset attention. The emotional peak at 70-80% with the swell drives completion and shares.",
+  "tags": [
+    "documentary",
+    "story",
+    "B-roll",
+    "voiceover",
+    "warm film",
+    "brand story",
+    "case study"
+  ],
+  "sort": 70,
+  "preview": {
+    "palette": [
+      "#120D08",
+      "#F4E7D2",
+      "#D7B98C",
+      "#8C5A2B",
+      "#2E4A48"
+    ],
+    "fonts": [
+      "Playfair Display",
+      "Montserrat"
+    ],
+    "caption_sample": "It started in a garage with one table.",
+    "caption_style": "Film subtitle",
+    "transitions": [
+      "Light leak",
+      "Hard cuts only"
+    ],
+    "music_beds": [
+      "Cinematic score",
+      "Acoustic / warm",
+      "Orchestral hybrid"
+    ],
+    "pace": 2,
+    "motion_sample": "A warm grainy frame slowly pushes in, an amber light leak sweeps across, and a serif chapter card fades up with a small tracked label above the title."
+  }
+}

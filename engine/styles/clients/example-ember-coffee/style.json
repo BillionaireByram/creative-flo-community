@@ -1,0 +1,28 @@
+{
+  "client": "example-ember-coffee",
+  "brand": "Ember Coffee Co",
+  "handle": "@EMBERCOFFEE",
+  "look": "look-editorial",
+  "type": "type-playfair",
+  "display": "Playfair Display",
+  "body": "Montserrat",
+  "caption": "cap-boxed",
+  "transition": "leak",
+  "transition_id": "tr-leak",
+  "grade": "grade-kodak",
+  "density": "density-balanced",
+  "accent": "#c2410c",
+  "highlight": "#f5d0a9",
+  "base": "#16130f",
+  "card": "paper",
+  "logo": "",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "tagline": "Link in bio.",
+  "music": [
+    "Acoustic / warm"
+  ],
+  "pace": 4,
+  "oncam": "Face + heavy B-roll"
+}

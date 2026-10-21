@@ -1,0 +1,139 @@
+{
+ "keeps": [
+  [
+   1.3,
+   3.9,
+   "Yo, check this out. You know what I did this morning?",
+   "phrase"
+  ],
+  [
+   4.1,
+   7.25,
+   "I shot this one video and I didn't have to think about it.",
+   "phrase"
+  ],
+  [
+   17.1,
+   19.45,
+   "Like, this actual video. One take.",
+   "word"
+  ],
+  [
+   24.55,
+   28.45,
+   "Me just talking to my phone, and then I was done. Like, actually done.",
+   "phrase"
+  ],
+  [
+   31.2,
+   33.05,
+   "Everything that you're seeing right now, the clips,",
+   "word"
+  ],
+  [
+   43.1,
+   44.62,
+   "the captions, the edit,",
+   "phrase"
+  ],
+  [
+   45.3,
+   46.22,
+   "I didn't do any of this.",
+   "beat"
+  ],
+  [
+   46.58,
+   47.36,
+   "Flo did.",
+   "beat"
+  ],
+  [
+   55.02,
+   56.08,
+   "It even picked a hook,",
+   "phrase"
+  ],
+  [
+   59.9,
+   65.8,
+   "told me which line to lead with, and it even cut out that last mistake I just did and you didn't even know it.",
+   "beat"
+  ],
+  [
+   75.8,
+   79.5,
+   "Now, a year ago, this would be like a two-person job or even a bigger team.",
+   "phrase"
+  ],
+  [
+   81.2,
+   86.6,
+   "I would have to shoot, send it to an editor, and they send it back to me, and I still may not even like it.",
+   "beat"
+  ],
+  [
+   89.4,
+   90.58,
+   "Now I just talked to Flo.",
+   "phrase"
+  ],
+  [
+   93.12,
+   94.7,
+   "It analyzes my social media,",
+   "word"
+  ],
+  [
+   95.85,
+   98.7,
+   "puts together the content that actually moves my business.",
+   "phrase"
+  ],
+  [
+   102.75,
+   106.18,
+   "It gives me a script and it edits the actual video.",
+   "phrase"
+  ],
+  [
+   106.58,
+   108.46,
+   "I didn't edit this video.",
+   "beat"
+  ],
+  [
+   130.85,
+   133.6,
+   "So if you're still out here shooting and editing your own videos,",
+   "phrase"
+  ],
+  [
+   135.38,
+   136.84,
+   "You're not behind because it's you.",
+   "phrase"
+  ],
+  [
+   141.8,
+   145.4,
+   "You're behind because you don't have the right operator in your business",
+   "word"
+  ],
+  [
+   146.4,
+   148.88,
+   "to actually get things done with quality.",
+   "beat"
+  ],
+  [
+   151.2,
+   156.5,
+   "Now if you're tired of doing everything manually and you want something like this, comment the word Flo and I got you.",
+   "end"
+  ]
+ ],
+ "force_in": {
+  "19": 4267
+ }
+}

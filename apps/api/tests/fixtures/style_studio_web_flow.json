@@ -1,0 +1,485 @@
+{
+  "patches": [
+    {
+      "answers": {
+        "notes": {
+          "section:brand": "About Your brand"
+        },
+        "answers": {
+          "brand": "Sample brand",
+          "style_name": "Sample style_name",
+          "handle": "Sample handle",
+          "sell": "Sample sell",
+          "price_range": "Sample price_range",
+          "audience": [
+            "Business owners",
+            "Aspiring entrepreneurs"
+          ],
+          "transformation": "Sample transformation",
+          "feel": "Sample feel",
+          "action": "Sample action",
+          "cta_keyword": "Sample cta_keyword",
+          "words": {
+            "is": [
+              "bold",
+              "warm",
+              "clear"
+            ],
+            "never": [
+              "loud",
+              "cheap",
+              "messy"
+            ]
+          },
+          "refs": [
+            "Creators, brands or films whose look you love one",
+            "Creators, brands or films whose look you love two"
+          ],
+          "avoid_refs": [
+            "Creators you never want to look like one",
+            "Creators you never want to look like two"
+          ],
+          "color1": "#112233",
+          "colorsMode": "Use these colors",
+          "colors": [
+            "#112233",
+            "#ffffff"
+          ],
+          "color2": "#ffffff",
+          "logo_asset_id": "0b8f1e4c-7a55-4a3c-9f6e-2d5a7b1c9e30",
+          "reference_videos": [
+            "https://example.com/reel-one",
+            "https://example.com/reel-two"
+          ]
+        },
+        "progress": {
+          "section": 1,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "notes": {
+          "section:platforms": "About Platforms and formats"
+        },
+        "answers": {
+          "platforms": [
+            "IG Reels",
+            "TikTok"
+          ],
+          "formats": [
+            "Vertical 9:16 (Reels, TikTok, Shorts)",
+            "Horizontal 16:9 (YouTube)"
+          ],
+          "lengths": {
+            "Vertical 9:16 (Reels, TikTok, Shorts)": "20-40s",
+            "Horizontal 16:9 (YouTube)": "20-40s"
+          },
+          "frequency": "Sample frequency"
+        },
+        "progress": {
+          "section": 2,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "tmpl-genius-cut": "love",
+          "tmpl-fast-cut": "maybe",
+          "tmpl-bold-captions": "no"
+        },
+        "notes": {
+          "tmpl-genius-cut": "Note on tmpl-genius-cut",
+          "section:templates": "About Editing styles"
+        },
+        "progress": {
+          "section": 3,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "look-noir": "love",
+          "look-keynote": "maybe",
+          "look-hud": "no"
+        },
+        "notes": {
+          "look-noir": "Note on look-noir",
+          "section:looks": "About Ten looks"
+        },
+        "progress": {
+          "section": 4,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "type-archivo": "love",
+          "type-michroma": "maybe",
+          "type-orbitron": "no"
+        },
+        "notes": {
+          "type-archivo": "Note on type-archivo",
+          "section:type": "About Type"
+        },
+        "progress": {
+          "section": 5,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "cap-pop": "love",
+          "cap-kara": "maybe",
+          "cap-cine": "no"
+        },
+        "notes": {
+          "cap-pop": "Note on cap-pop",
+          "section:captions": "About Captions"
+        },
+        "progress": {
+          "section": 6,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "hook-claim": "love",
+          "hook-question": "maybe",
+          "hook-result": "no"
+        },
+        "notes": {
+          "hook-claim": "Note on hook-claim",
+          "section:hooks": "About Hooks and structure"
+        },
+        "answers": {
+          "hook_styles": [
+            "Bold claim",
+            "Question"
+          ],
+          "hook_energy": 5,
+          "chaptering": "No chapters",
+          "end_tag": [
+            "Logo end tag",
+            "Handle and tagline"
+          ],
+          "cta": [
+            "Comment a keyword",
+            "Link in bio"
+          ],
+          "motif": [
+            "Logo end tag",
+            "A color flash / light line"
+          ],
+          "motifNote": "Sample motifNote"
+        },
+        "progress": {
+          "section": 7,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "tr-whip": "love",
+          "tr-punch": "maybe",
+          "tr-leak": "no"
+        },
+        "notes": {
+          "tr-whip": "Note on tr-whip",
+          "section:transitions": "About Transitions"
+        },
+        "progress": {
+          "section": 8,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "motion-takeover": "love",
+          "motion-face": "maybe"
+        },
+        "notes": {
+          "motion-takeover": "Note on motion-takeover",
+          "section:motion": "About Motion graphics and B-roll"
+        },
+        "answers": {
+          "graphics_intensity": 5,
+          "card_tiers": "Full-screen takeovers",
+          "broll_sources": [
+            "Own footage",
+            "Stock"
+          ],
+          "zoom_frequency": "Rarely",
+          "stickers": true,
+          "sound_text": true
+        },
+        "progress": {
+          "section": 9,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "grade-teal": "love",
+          "grade-bleach": "maybe",
+          "grade-mono": "no"
+        },
+        "notes": {
+          "grade-teal": "Note on grade-teal",
+          "section:grade": "About Color grade"
+        },
+        "progress": {
+          "section": 10,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "notes": {
+          "section:music": "About Music and sound"
+        },
+        "answers": {
+          "music": [
+            "Cinematic score",
+            "Dark trap / drill"
+          ],
+          "music_energy": 5,
+          "music_under": "low",
+          "sound_design": [
+            "Whooshes",
+            "Risers"
+          ],
+          "sfx_density": 5
+        },
+        "progress": {
+          "section": 11,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "ratings": {
+          "density-minimal": "love",
+          "density-balanced": "maybe",
+          "density-heavy": "no"
+        },
+        "notes": {
+          "density-minimal": "Note on density-minimal",
+          "section:pace": "About How much editing?"
+        },
+        "answers": {
+          "pace": 10,
+          "oncam": "Face the whole time"
+        },
+        "progress": {
+          "section": 12,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "notes": {
+          "section:other": "About Anything else"
+        },
+        "answers": {
+          "perfect_video": "Sample perfect_video",
+          "hate": "Sample hate"
+        },
+        "progress": {
+          "section": 13,
+          "updated": "2026-10-06T12:00:00.000Z"
+        }
+      }
+    },
+    {
+      "answers": {
+        "answers": {
+          "done": true
+        }
+      }
+    }
+  ],
+  "final": {
+    "version": "style-lab-v3",
+    "ratings": {
+      "tmpl-genius-cut": "love",
+      "tmpl-fast-cut": "maybe",
+      "tmpl-bold-captions": "no",
+      "look-noir": "love",
+      "look-keynote": "maybe",
+      "look-hud": "no",
+      "type-archivo": "love",
+      "type-michroma": "maybe",
+      "type-orbitron": "no",
+      "cap-pop": "love",
+      "cap-kara": "maybe",
+      "cap-cine": "no",
+      "hook-claim": "love",
+      "hook-question": "maybe",
+      "hook-result": "no",
+      "tr-whip": "love",
+      "tr-punch": "maybe",
+      "tr-leak": "no",
+      "motion-takeover": "love",
+      "motion-face": "maybe",
+      "grade-teal": "love",
+      "grade-bleach": "maybe",
+      "grade-mono": "no",
+      "density-minimal": "love",
+      "density-balanced": "maybe",
+      "density-heavy": "no"
+    },
+    "notes": {
+      "section:brand": "About Your brand",
+      "section:platforms": "About Platforms and formats",
+      "tmpl-genius-cut": "Note on tmpl-genius-cut",
+      "section:templates": "About Editing styles",
+      "look-noir": "Note on look-noir",
+      "section:looks": "About Ten looks",
+      "type-archivo": "Note on type-archivo",
+      "section:type": "About Type",
+      "cap-pop": "Note on cap-pop",
+      "section:captions": "About Captions",
+      "hook-claim": "Note on hook-claim",
+      "section:hooks": "About Hooks and structure",
+      "tr-whip": "Note on tr-whip",
+      "section:transitions": "About Transitions",
+      "motion-takeover": "Note on motion-takeover",
+      "section:motion": "About Motion graphics and B-roll",
+      "grade-teal": "Note on grade-teal",
+      "section:grade": "About Color grade",
+      "section:music": "About Music and sound",
+      "density-minimal": "Note on density-minimal",
+      "section:pace": "About How much editing?",
+      "section:other": "About Anything else"
+    },
+    "answers": {
+      "brand": "Sample brand",
+      "style_name": "Sample style_name",
+      "handle": "Sample handle",
+      "sell": "Sample sell",
+      "price_range": "Sample price_range",
+      "audience": [
+        "Business owners",
+        "Aspiring entrepreneurs"
+      ],
+      "transformation": "Sample transformation",
+      "feel": "Sample feel",
+      "action": "Sample action",
+      "cta_keyword": "Sample cta_keyword",
+      "words": {
+        "is": [
+          "bold",
+          "warm",
+          "clear"
+        ],
+        "never": [
+          "loud",
+          "cheap",
+          "messy"
+        ]
+      },
+      "refs": [
+        "Creators, brands or films whose look you love one",
+        "Creators, brands or films whose look you love two"
+      ],
+      "avoid_refs": [
+        "Creators you never want to look like one",
+        "Creators you never want to look like two"
+      ],
+      "color1": "#112233",
+      "colorsMode": "Use these colors",
+      "colors": [
+        "#112233",
+        "#ffffff"
+      ],
+      "color2": "#ffffff",
+      "logo_asset_id": "0b8f1e4c-7a55-4a3c-9f6e-2d5a7b1c9e30",
+      "reference_videos": [
+        "https://example.com/reel-one",
+        "https://example.com/reel-two"
+      ],
+      "platforms": [
+        "IG Reels",
+        "TikTok"
+      ],
+      "formats": [
+        "Vertical 9:16 (Reels, TikTok, Shorts)",
+        "Horizontal 16:9 (YouTube)"
+      ],
+      "lengths": {
+        "Vertical 9:16 (Reels, TikTok, Shorts)": "20-40s",
+        "Horizontal 16:9 (YouTube)": "20-40s"
+      },
+      "frequency": "Sample frequency",
+      "hook_styles": [
+        "Bold claim",
+        "Question"
+      ],
+      "hook_energy": 5,
+      "chaptering": "No chapters",
+      "end_tag": [
+        "Logo end tag",
+        "Handle and tagline"
+      ],
+      "cta": [
+        "Comment a keyword",
+        "Link in bio"
+      ],
+      "motif": [
+        "Logo end tag",
+        "A color flash / light line"
+      ],
+      "motifNote": "Sample motifNote",
+      "graphics_intensity": 5,
+      "card_tiers": "Full-screen takeovers",
+      "broll_sources": [
+        "Own footage",
+        "Stock"
+      ],
+      "zoom_frequency": "Rarely",
+      "stickers": true,
+      "sound_text": true,
+      "music": [
+        "Cinematic score",
+        "Dark trap / drill"
+      ],
+      "music_energy": 5,
+      "music_under": "low",
+      "sound_design": [
+        "Whooshes",
+        "Risers"
+      ],
+      "sfx_density": 5,
+      "pace": 10,
+      "oncam": "Face the whole time",
+      "perfect_video": "Sample perfect_video",
+      "hate": "Sample hate",
+      "done": true
+    },
+    "progress": {
+      "section": 13,
+      "updated": "2026-10-06T12:00:00.000Z"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "client": "cinematic-story",
+  "brand": "Cinematic Story",
+  "look": "look-cinema",
+  "type": "type-archivo-soft",
+  "display": "Archivo",
+  "body": "Inter",
+  "caption": "cap-kinetic",
+  "transition": "cut",
+  "transition_id": "tr-cut",
+  "grade": "grade-cine",
+  "density": "density-story",
+  "accent": "#F5C542",
+  "highlight": "#F5C542",
+  "base": "#0B0A08",
+  "paper": "#F2EADB",
+  "card": "paper",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "music": [
+    "Chill-hop instrumental (chill-a), mixed low under story lines"
+  ],
+  "pace": 5,
+  "oncam": "Real A camera + AI angles + reenactment shots",
+  "ai_angles": {
+    "model": "kling-3.0-omni/transformation",
+    "allowed": [
+      "side close-up",
+      "3/4 profile",
+      "high wide"
+    ],
+    "never": [
+      "low angle looking up"
+    ],
+    "max_beat_s": 2.5
+  },
+  "skins": {
+    "story": {
+      "base": "#0B0A08",
+      "accent": "#F5C542",
+      "highlight": "#F5C542"
+    }
+  },
+  "skin": "story",
+  "broll_model": "bytedance/seedance-2-5",
+  "reenact_model": "kling-3.0-omni/reference-to-video",
+  "kinetic": {
+    "module": "pipeline/kinetic.py",
+    "fonts": [
+      "Inter Italic",
+      "Inter ExtraBold Italic",
+      "script accent (Mr Dafoe; Barett Street once licensed)"
+    ],
+    "accent": "#F5C542",
+    "top": 1060,
+    "height": 420,
+    "max_width": 680,
+    "theme": "italic"
+  }
+}

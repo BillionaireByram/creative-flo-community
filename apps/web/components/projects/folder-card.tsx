@@ -1,0 +1,341 @@
+'use client'
+
+import React, { useCallback, useRef, useState } from 'react'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import useSWR from 'swr'
+import { Folder, Film, Music, Image as ImageIcon, Images, MoreHorizontal, Pencil, Trash, Share2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { api } from '@/lib/api'
+import { NameDialog } from './name-dialog'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import type { Folder as FolderType, AssetResponse } from '@/types'
+import { carriesFiles } from '@/lib/drag'
+import { isTouchGesture } from '@/lib/touch'
+import { useCoarsePointer, useLongPress } from '@/hooks/use-long-press'
+
+const assetTypeIcons = {
+  video: Film,
+  audio: Music,
+  image: ImageIcon,
+  image_carousel: Images,
+} as const
+
+function ThumbCell({ asset, className }: { asset: AssetResponse; className?: string }) {
+  const [failed, setFailed] = React.useState(false)
+  const TypeIcon = assetTypeIcons[asset.asset_type as keyof typeof assetTypeIcons] ?? ImageIcon
+
+  if (failed || !asset.thumbnail_url) {
+    return (
+      <div className={cn('overflow-hidden bg-bg-tertiary flex items-center justify-center', className)}>
+        <TypeIcon className="h-6 w-6 text-text-tertiary/50" />
+      </div>
+    )
+  }
+
+  return (
+    <div className={cn('overflow-hidden bg-bg-tertiary', className)}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={asset.thumbnail_url}
+        alt={asset.name}
+        onError={() => setFailed(true)}
+        className="h-full w-full object-cover"
+      />
+    </div>
+  )
+}
+
+function FolderThumbnails({ projectId, folderId, itemCount }: { projectId: string; folderId: string; itemCount: number }) {
+  const { data: assets } = useSWR<AssetResponse[]>(
+    itemCount > 0 ? `/projects/${projectId}/assets?folder_id=${folderId}` : null,
+    (key: string) => api.get<AssetResponse[]>(key),
+    { revalidateOnFocus: false },
+  )
+
+  // Prefer assets with thumbnails first, fill with any up to 3
+  const sorted = (assets ?? []).sort((a, b) => (b.thumbnail_url ? 1 : 0) - (a.thumbnail_url ? 1 : 0))
+  const thumbs = sorted.slice(0, 3)
+
+  if (thumbs.length === 0) {
+    return (
+      <div className="aspect-[4/3] flex items-center justify-center bg-bg-tertiary rounded-t-lg">
+        <Folder className="h-12 w-12 text-text-tertiary/50" />
+      </div>
+    )
+  }
+
+  return (
+    <div className={cn(
+      'aspect-[4/3] rounded-t-lg overflow-hidden grid gap-px bg-bg-tertiary',
+      thumbs.length === 1 && 'grid-cols-1',
+      thumbs.length >= 2 && 'grid-cols-2',
+    )}>
+      {thumbs.map((asset, i) => (
+        <ThumbCell
+          key={asset.id}
+          asset={asset}
+          className={thumbs.length === 3 && i === 0 ? 'row-span-2' : undefined}
+        />
+      ))}
+    </div>
+  )
+}
+
+interface FolderCardProps {
+  folder: FolderType
+  selected?: boolean
+  onOpen: (folder: FolderType) => void
+  onSelect?: (e: React.MouseEvent) => void
+  onLongPress?: () => void
+  selectionMode?: boolean
+  onRename?: (folderId: string, name: string) => Promise<void>
+  onDelete?: (folderId: string) => Promise<void>
+  onShare?: (folderId: string, folderName: string) => Promise<void>
+  onDropItems?: (targetFolderId: string, assetIds: string[], folderIds: string[]) => void
+  /** Files dropped on this folder upload into it. Absent = uploads not allowed here. */
+  onDropFiles?: (targetFolderId: string, files: File[]) => void
+  /** Tells the region above that a file drag is over this folder, so it can
+   *  shrink its own marking to this one -- two frames lit at once do not say
+   *  where the file will land. On release the folder names itself, so a leave
+   *  arriving after the next folder has claimed the drag cannot end its turn. */
+  onFileDragOverFolder?: (folderId: string | null, from?: string) => void
+  /** Whether this folder is the current file-drag target. Owned by the region
+   *  rather than by the card: only one folder can hold it, so "exactly one
+   *  frame is lit" is a property of the state and not of the cards agreeing. */
+  fileDragActive?: boolean
+  className?: string
+}
+
+export function FolderCard({
+  folder,
+  selected,
+  onOpen,
+  onSelect,
+  onLongPress,
+  selectionMode = false,
+  onRename,
+  onDelete,
+  onShare,
+  onDropItems,
+  onDropFiles,
+  onFileDragOverFolder,
+  fileDragActive,
+  className,
+}: FolderCardProps) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [isDragOver, setIsDragOver] = useState(false)
+  const [renameOpen, setRenameOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const coarse = useCoarsePointer()
+  const longPress = useLongPress(onLongPress)
+
+  // Draggable
+  const handleDragStart = useCallback(
+    (e: React.DragEvent) => {
+      e.dataTransfer.setData(
+        'application/json',
+        JSON.stringify({ folderIds: [folder.id], assetIds: [] }),
+      )
+      e.dataTransfer.effectAllowed = 'move'
+    },
+    [folder.id],
+  )
+
+  // Counted, not toggled: dragenter/dragleave fire for the card's own children
+  // too, so a boolean drops the highlight as the pointer crosses the thumbnail.
+  const dragDepth = useRef(0)
+
+  const clearDrag = useCallback(() => {
+    dragDepth.current = 0
+    setIsDragOver(false)
+    onFileDragOverFolder?.(null, folder.id)
+  }, [folder.id, onFileDragOverFolder])
+
+  const handleDragEnter = useCallback((e: React.DragEvent) => {
+    if (!carriesFiles(e) || !onDropFiles) return
+    e.preventDefault()
+    // Deliberately NOT stopPropagation: the region above counts dragenter
+    // against dragleave to know when the pointer has left it entirely, and
+    // swallowing one half of that pair makes its counter drift.
+    dragDepth.current += 1
+    // No local highlight for a file drag: `fileDragActive` decides that, so two
+    // cards cannot both be lit while the pointer is between them.
+    onFileDragOverFolder?.(folder.id)
+  }, [folder.id, onDropFiles, onFileDragOverFolder])
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    if (carriesFiles(e) && onDropFiles) {
+      // See handleDragEnter: this half bubbles too, or the region's count of
+      // its own children never comes back down.
+      dragDepth.current = Math.max(0, dragDepth.current - 1)
+      if (dragDepth.current > 0) return
+    }
+    clearDrag()
+  }, [clearDrag, onDropFiles])
+
+  // Drop target
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    if (carriesFiles(e)) {
+      // Prevented before anything else. A reviewer, correctly given no upload
+      // handler, used to fall through to the browser's own file handling,
+      // which navigates the tab to `file:///...` and takes the app with it.
+      // Refusing has to be explicit; `none` is what says so to the pointer.
+      e.preventDefault()
+      if (!onDropFiles) {
+        e.dataTransfer.dropEffect = 'none'
+        return
+      }
+      // A folder is a more specific target than the region behind it, so it
+      // takes the event rather than letting it through.
+      e.stopPropagation()
+      e.dataTransfer.dropEffect = 'copy'
+      // Re-asserted on every dragover, not only on entry: this is what makes
+      // the marking recover by itself if anything ever releases it early.
+      onFileDragOverFolder?.(folder.id)
+      return
+    }
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    setIsDragOver(true)
+  }, [folder.id, onDropFiles, onFileDragOverFolder])
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      if (carriesFiles(e)) {
+        // See handleDragOver: prevented whether or not it is accepted.
+        e.preventDefault()
+        if (!onDropFiles) return
+        // Stops the region above uploading the same files into the open folder.
+        e.stopPropagation()
+        clearDrag()
+        // Handed over even when the list is empty, which is what several
+        // promised-file sources on macOS produce. The region behind this card
+        // never sees the drop, so its marking comes down through this call and
+        // nothing else: skipping it leaves "Drop to upload" on screen for good.
+        onDropFiles(folder.id, Array.from(e.dataTransfer.files))
+        return
+      }
+      e.preventDefault()
+      setIsDragOver(false)
+      try {
+        const data = JSON.parse(e.dataTransfer.getData('application/json'))
+        // Don't allow dropping a folder onto itself
+        if (data.folderIds?.includes(folder.id)) return
+        onDropItems?.(folder.id, data.assetIds ?? [], data.folderIds ?? [])
+      } catch {}
+    },
+    [folder.id, onDropItems, onDropFiles, clearDrag],
+  )
+
+  return (
+    <>
+      <div
+        data-testid="folder-card"
+        data-touch-card
+        {...longPress}
+        onPointerDown={(e) => {
+          if (e.currentTarget.contains(e.target as Node) && !(e.target as HTMLElement).closest('button')) longPress.onPointerDown(e)
+        }}
+        className={cn(
+          'group relative min-w-0 rounded-lg border bg-bg-tertiary/50 cursor-pointer transition-all [@media(hover:hover)]:hover:border-border-focus [@media(hover:hover)]:hover:scale-[1.01]',
+          selected ? 'ring-2 ring-accent border-accent/50' : 'border-border',
+          (isDragOver || fileDragActive) && 'ring-2 ring-accent/50 bg-accent/5',
+          menuOpen && 'z-[60]',
+          className,
+        )}
+        draggable={!coarse}
+        onDragStart={handleDragStart}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onDoubleClick={(e) => {
+          if (!selectionMode && !(e.target as HTMLElement).closest('button, [role="menuitem"]')) onOpen(folder)
+        }}
+        onClick={(e) => {
+          if (!selectionMode && isTouchGesture(e)) { onOpen(folder); return }
+          onSelect?.(e)
+        }}
+      >
+        {/* Folder thumbnail preview */}
+        <FolderThumbnails projectId={folder.project_id} folderId={folder.id} itemCount={folder.item_count} />
+
+        {/* Info */}
+        <div className="px-3 py-2">
+          <div className="flex items-start justify-between gap-1">
+            <p className="min-w-0 text-sm font-medium text-text-primary truncate">{folder.name}</p>
+            <DropdownMenu.Root open={menuOpen} onOpenChange={setMenuOpen}>
+              <DropdownMenu.Trigger asChild>
+              <button
+                aria-label={`Actions for ${folder.name}`}
+                className="relative tap-target opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 flex items-center justify-center h-6 w-6 rounded [@media(hover:hover)]:hover:bg-bg-hover transition-opacity shrink-0 [@media(pointer:coarse)]:min-h-11 [@media(pointer:coarse)]:min-w-11"
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+              >
+                <MoreHorizontal className="h-3.5 w-3.5 text-text-tertiary" />
+              </button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content align="end" sideOffset={4} collisionPadding={8} onClick={(e) => e.stopPropagation()} className="z-50 w-40 max-w-[calc(100vw-16px)] max-h-[var(--radix-dropdown-menu-content-available-height)] overflow-y-auto rounded-lg border border-border bg-bg-elevated shadow-xl py-1">
+                  <DropdownMenu.Item
+                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-text-secondary [@media(hover:hover)]:hover:bg-bg-hover [@media(pointer:coarse)]:min-h-11"
+                    onSelect={() => {
+                      setMenuOpen(false)
+                      setRenameOpen(true)
+                    }}
+                  >
+                    <Pencil className="h-3 w-3" /> Rename
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-text-secondary [@media(hover:hover)]:hover:bg-bg-hover [@media(pointer:coarse)]:min-h-11"
+                    onSelect={() => {
+                      setMenuOpen(false)
+                      onShare?.(folder.id, folder.name)
+                    }}
+                  >
+                    <Share2 className="h-3 w-3" /> Share
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs text-red-400 [@media(hover:hover)]:hover:bg-red-500/10 [@media(pointer:coarse)]:min-h-11"
+                    onSelect={() => {
+                      setMenuOpen(false)
+                      setDeleteOpen(true)
+                    }}
+                  >
+                    <Trash className="h-3 w-3" /> Delete
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
+          </div>
+          <p className="text-xs text-text-tertiary mt-0.5">
+            {folder.item_count} {folder.item_count === 1 ? 'Item' : 'Items'}
+          </p>
+        </div>
+      </div>
+
+      {/* Rename dialog */}
+      <NameDialog
+        open={renameOpen}
+        onOpenChange={setRenameOpen}
+        title="Rename Folder"
+        placeholder="Folder name"
+        defaultValue={folder.name}
+        submitLabel="Rename"
+        onSubmit={(name) => onRename?.(folder.id, name)}
+      />
+
+      {/* Delete confirmation */}
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title={`Delete "${folder.name}"?`}
+        description="This folder and all its contents will be moved to trash. You can restore them later."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => onDelete?.(folder.id)}
+      />
+    </>
+  )
+}

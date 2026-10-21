@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<title>Ember Coffee Co style sample</title>
+<script src="assets/gsap.min.js"></script>
+<style>
+@font-face{font-family:"Playfair Display";src:url(assets/fonts/PlayfairDisplay-var.ttf) format("truetype");font-weight:100 900}
+@font-face{font-family:"Montserrat";src:url(assets/fonts/Montserrat-var.ttf) format("truetype");font-weight:100 900}
+@font-face{font-family:"Roboto Mono";src:url(assets/fonts/RobotoMono-var.ttf) format("truetype");font-weight:100 900}
+
+/* Skin tokens. Pick with data-skin on #root: "red" (Example Studio / Sample Creator) or "flo" (Creative Flo). */
+#root{
+  --base:#050505; --accent:#e00000; --accent-hot:#ff1a1a; --hl:#ff1a1a; --ice:#ffffff;
+  --glass:rgba(22,6,8,.56); --rim:rgba(255,70,70,.30);
+  --f-cap:"Archivo",Arial,sans-serif; --f-card:"Archivo",Arial,sans-serif; --f-mono:"Roboto Mono",Menlo,monospace;
+}
+#root[data-skin="flo"]{
+  --base:#070A12; --accent:#00A0FF; --accent-hot:#79C8FF; --hl:#FFB869; --ice:#79C8FF;
+  --glass:rgba(7,14,28,.56); --rim:rgba(121,200,255,.30);
+  --f-card:"Montserrat",Arial,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#shake{position:absolute;inset:0}
+#root[data-skin="client"]{--base:#16130f;--accent:#c2410c;--accent-hot:#c2410c;--hl:#f5d0a9;--ice:#ffffff;--glass:rgba(10,12,16,.56);--rim:rgba(255,255,255,.28);--f-cap:"Playfair Display",Arial,sans-serif;--f-card:"Playfair Display",Arial,sans-serif;--f-body:"Montserrat",Arial,sans-serif;--f-mono:"Roboto Mono",Menlo,monospace}
+#root[data-skin="client"] .ln{font-weight:800;}
+#root[data-skin="client"] .ln.hl{background:var(--hl);color:#111!important;padding:0 .18em;border-radius:12px}
+#root[data-skin="client"] .card-h{font-weight:800}
+#root[data-skin="client"] .grade{background:linear-gradient(180deg,rgba(255,200,120,.22),rgba(120,60,20,.25));mix-blend-mode:soft-light}
+#root[data-skin="client"] .broll-art{background:radial-gradient(60% 40% at 50% 55%,#c2410c66,#050505 70%)}
+#root[data-skin="client"] .logo-wrap{height:600px;width:900px}
+#root[data-skin="client"] .card-in{background:#efe9df;color:#16130f;backdrop-filter:none;border-color:transparent;border-radius:6px;box-shadow:10px 12px 0 rgba(0,0,0,.25)}
+#root[data-skin="client"] .row{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.08)}
+#root[data-skin="client"] .eyebrow{color:#16130f}
+#root[data-skin="client"] .card-h em{color:var(--accent)}
+#root[data-skin="client"] .slice{background:radial-gradient(60% 120% at 20% 50%,rgba(255,140,40,.95),transparent 70%)!important;top:0!important;height:100%!important}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--base);color:#fff}
+
+/* ---- Speaker plate (placeholder for real footage; real video gets the same grade) ---- */
+#stage{position:absolute;inset:0;overflow:hidden}
+#push,#plate{position:absolute;inset:0;transform-origin:50% 40%}
+.plate-bg{position:absolute;inset:0;background:radial-gradient(70% 50% at 50% 30%,#1c3a44 0%,#0b1a20 55%,#040809 100%)}
+.plate-person{position:absolute;left:50%;top:420px;width:640px;height:1500px;transform:translateX(-50%);
+  background:radial-gradient(40% 16% at 50% 17%,#b07a52 0%,#6a4128 60%,transparent 62%),radial-gradient(70% 45% at 50% 70%,#1a1a1d 0%,#0d0d0f 70%,transparent 72%)}
+.plate-label{position:absolute;left:90px;top:220px;font:400 22px var(--f-mono);letter-spacing:.3em;color:rgba(255,255,255,.35)}
+/* Grade: teal shadows, warm skin. For real footage apply .grade over the <video>. */
+.grade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,110,130,.30),rgba(255,130,50,.18));mix-blend-mode:soft-light;pointer-events:none}
+.vignette{position:absolute;inset:0;box-shadow:inset 0 0 260px 60px rgba(0,0,0,.75);pointer-events:none}
+.grain{position:absolute;inset:0;opacity:.10;pointer-events:none;background-image:repeating-radial-gradient(circle at 17% 32%,rgba(255,255,255,.5) 0 1px,transparent 1px 3px),repeating-radial-gradient(circle at 73% 61%,rgba(0,0,0,.6) 0 1px,transparent 1px 4px);mix-blend-mode:overlay}
+
+/* ---- Glass card ---- */
+#card{position:absolute;inset:0;pointer-events:none}
+.card-in{position:absolute;left:90px;right:90px;top:300px;padding:56px 56px 60px;border-radius:36px;
+  background:linear-gradient(150deg,rgba(255,255,255,.12),rgba(255,255,255,.03) 45%,rgba(255,255,255,.07)),var(--glass);
+  backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);
+  border:1.5px solid var(--rim);box-shadow:0 50px 100px rgba(0,0,0,.6),inset 0 1.5px 0 rgba(255,255,255,.35);overflow:hidden}
+.card-in .sheen{position:absolute;top:-20%;bottom:-20%;width:180px;left:-240px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-14deg)}
+.eyebrow{font:400 22px var(--f-mono);letter-spacing:.28em;color:var(--ice);display:flex;align-items:center;gap:16px}
+.eyebrow i{width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent)}
+.card-h{margin-top:26px;font:600 64px/1.05 var(--f-card);letter-spacing:-.01em}
+#root[data-skin="red"] .card-h{font-weight:800;font-stretch:115%}
+.card-h em{font-style:normal;color:var(--hl)}
+.rows{margin-top:40px;display:grid;gap:18px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font:500 34px var(--f-card)}
+.row b{font:400 22px var(--f-mono);letter-spacing:.18em;color:var(--accent-hot)}
+
+/* ---- B-roll takeover slot ---- */
+#broll{position:absolute;inset:0;overflow:hidden;background:#000}
+.broll-art{position:absolute;inset:-10%}
+#root[data-skin="flo"] .broll-art{background:
+  linear-gradient(90deg,transparent 18%,rgba(0,160,255,.55) 22%,transparent 27%,transparent 58%,rgba(255,184,105,.45) 62%,transparent 66%,transparent 78%,rgba(121,200,255,.35) 80%,transparent 83%),
+  radial-gradient(60% 40% at 50% 60%,#0b2a48,#070A12 70%)}
+#root[data-skin="red"] .broll-art{background:
+  linear-gradient(115deg,transparent 30%,rgba(224,0,0,.65) 46%,rgba(255,26,26,.15) 52%,transparent 60%),
+  radial-gradient(60% 40% at 50% 55%,#3a0505,#050505 70%)}
+.broll-label{position:absolute;left:90px;top:220px;font:400 22px var(--f-mono);letter-spacing:.3em;color:rgba(255,255,255,.45)}
+
+/* ---- Captions: kinetic stack ---- */
+#caps{position:absolute;left:90px;right:90px;top:1180px;height:420px}
+.grp{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}
+.ln{font:900 80px/0.98 var(--f-cap);font-stretch:125%;text-transform:uppercase;letter-spacing:-.01em;text-align:center;white-space:nowrap;
+  text-shadow:0 6px 30px rgba(0,0,0,.65),0 2px 0 rgba(0,0,0,.4)}
+.ln.hl{color:var(--hl)}
+
+/* ---- Glitch hit ---- */
+#glitch{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen}
+.slice{position:absolute;left:0;right:0}
+.s1{top:12%;height:6%;background:var(--accent)}.s2{top:31%;height:2%;background:#00e5ff}.s3{top:47%;height:9%;background:var(--accent-hot)}
+.s4{top:66%;height:3%;background:#00e5ff}.s5{top:79%;height:7%;background:var(--accent)}
+
+/* ---- End tag ---- */
+#endtag{position:absolute;inset:0;background:var(--base);display:grid;place-items:center}
+.lockup{position:relative;display:grid;justify-items:center;gap:30px}
+.logo-wrap{position:relative;width:820px;height:300px}
+.logo-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.logo-wrap img.r{filter:drop-shadow(0 0 0 #f00);mix-blend-mode:screen;opacity:.0}
+.logo-wrap img.c{mix-blend-mode:screen;opacity:.0}
+#root[data-skin="red"] .logo-wrap{height:700px;width:960px}
+.handle{font:400 30px var(--f-mono);letter-spacing:.32em;color:rgba(255,255,255,.8)}
+.tagline{font:800 40px var(--f-cap);font-stretch:125%;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-hot)}
+.endline{position:absolute;left:90px;right:90px;top:50%;height:2px;background:var(--accent);box-shadow:0 0 30px var(--accent);transform-origin:50% 50%}
+</style>
+</head>
+<body>
+<div id="root" data-skin="client" data-composition-id="client-style" data-start="0" data-duration="10" data-width="1080" data-height="1920">
+<div id="shake">
+
+  <div id="stage" class="clip" data-start="0" data-duration="8.2" data-track-index="0">
+    <div id="push"><div id="plate">
+      <div class="plate-bg"></div>
+      <div class="plate-person"></div>
+      <div class="plate-label">YOUR FOOTAGE · FACE CAM</div>
+    </div></div>
+    <div class="grade"></div><div class="vignette"></div><div class="grain"></div>
+  </div>
+
+  <div id="broll" class="clip" data-start="6" data-duration="2.2" data-track-index="1">
+    <div class="broll-art"></div>
+    <div class="broll-label">B-ROLL SLOT · REAL SCREEN / GENERATED</div>
+    <div class="grade"></div><div class="vignette"></div><div class="grain"></div>
+  </div>
+
+  <div id="card" class="clip" data-start="2.7" data-duration="3.2" data-track-index="2"><div class="card-in">
+    <div class="sheen"></div>
+    <div class="eyebrow"><i></i><span>EMBER COFFEE CO</span></div>
+    <div class="card-h">Built for<br><em>what you do.</em></div>
+    <div class="rows">
+      <div class="row"><span>Step one</span><b>DONE</b></div>
+      <div class="row"><span>Step two</span><b>DONE</b></div>
+      <div class="row"><span>Step three</span><b>DONE</b></div>
+    </div>
+  </div></div>
+
+  <div id="caps" class="clip" data-start="0" data-duration="8.2" data-track-index="3">
+    <div class="grp" id="g1"><div class="ln">Most people</div><div class="ln">do it</div><div class="ln hl">the hard way.</div></div>
+    <div class="grp" id="g2"><div class="ln">We built</div><div class="ln hl">a better way.</div></div>
+    <div class="grp" id="g3"><div class="ln">Faster.</div><div class="ln">Simpler.</div><div class="ln hl">Better.</div></div>
+    <div class="grp" id="g4"><div class="ln">Here's how</div><div class="ln hl">it works.</div></div>
+  </div>
+
+  <div id="glitch" class="clip" data-start="5.85" data-duration="0.4" data-track-index="4">
+    <div class="slice s1"></div><div class="slice s2"></div><div class="slice s3"></div><div class="slice s4"></div><div class="slice s5"></div>
+  </div>
+
+  <div id="endtag" class="clip" data-start="8.2" data-duration="1.8" data-track-index="5">
+    <div class="endline"></div>
+    <div class="lockup">
+      <div class="logo-wrap" style="height:auto;width:auto"><div style="font:900 120px var(--f-cap);text-align:center">Ember Coffee Co</div></div>
+      <div class="tagline">Link in bio.</div>
+      <div class="handle">@EMBERCOFFEE</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+  var root=document.getElementById("root");
+  var SKIN=root.getAttribute("data-skin");
+  if(SKIN==="flo"){
+    document.querySelectorAll(".logo-wrap img").forEach(function(i){i.src="assets/df-logo.webp";});
+    document.querySelector(".tagline").textContent="Find your Flo.";
+    document.querySelector(".handle").textContent="REVIEW.EXAMPLE.COM";
+  }
+
+  window.__timelines=window.__timelines||{};
+  var tl=gsap.timeline({paused:true});
+
+  /* Speaker: slow cinematic push, punch-ins on caption hits */
+  gsap.set("#push, #plate",{scale:1.0});
+  tl.to("#push",{scale:1.08,duration:6,ease:"none"},0);
+  tl.to("#plate",{scale:1.1,duration:0.18,ease:"power3.out"},2.45);
+  tl.to("#plate",{scale:1.04,duration:0.6,ease:"power2.inOut"},2.65);
+
+  /* Kinetic stack captions */
+  var groups=[
+    {id:"#g1",at:[0.25,0.7,1.15],out:2.3},
+    {id:"#g2",at:[2.45,2.9],out:4.2},
+    {id:"#g3",at:[4.35,4.75,5.15],out:5.85},
+    {id:"#g4",at:[6.4,6.85],out:8.0}
+  ];
+  groups.forEach(function(g){
+    var lines=document.querySelectorAll(g.id+" .ln");
+    gsap.set(lines,{opacity:0,y:60,scale:1.25});
+    lines.forEach(function(ln,i){tl.to(ln,{opacity:1,y:0,scale:1,duration:0.22,ease:"back.out(2.2)"},g.at[i]);});
+    tl.to(lines,{opacity:0,y:-30,duration:0.16,ease:"power2.in",stagger:0.02},g.out);
+  });
+
+  /* Glass card */
+  gsap.set(".card-in",{opacity:0,y:80,scale:0.96});
+  gsap.set("#card .eyebrow, #card .card-h, #card .row",{opacity:0,y:24});
+  tl.to(".card-in",{opacity:1,y:0,scale:1,duration:0.5,ease:"power3.out"},2.7);
+  tl.to("#card .sheen",{x:1300,duration:0.9,ease:"power2.out"},2.8);
+  tl.to("#card .eyebrow, #card .card-h",{opacity:1,y:0,duration:0.4,ease:"power3.out",stagger:0.08},2.85);
+  tl.to("#card .row",{opacity:1,y:0,duration:0.35,ease:"power3.out",stagger:0.12},4.35);
+  tl.to(".card-in",{opacity:0,y:-40,duration:0.3,ease:"power2.in"},5.5);
+  tl.set(".card-in",{opacity:0},5.85);
+
+  /* Glitch hit into B-roll */
+  gsap.set("#glitch .slice",{opacity:0});
+  var gt=[5.86,5.92,5.98,6.04,6.1,6.16];
+  gt.forEach(function(t,i){
+    tl.set("#glitch .slice",{opacity:function(j){return (i+j)%2?0.6:0;},x:function(j){return ((i*37+j*53)%120)-60;}},t);
+    tl.set("#shake",{x:(i%2?-14:14)},t);
+  });
+  tl.set("#glitch .slice",{opacity:0},6.22);
+  tl.set("#shake",{x:0},6.22);
+
+  /* B-roll slow push */
+  gsap.set("#broll .broll-art",{scale:1.0});
+  tl.to("#broll .broll-art",{scale:1.12,x:-30,duration:2.2,ease:"none"},6);
+
+  /* End tag: glitch the logo in, then hold */
+  gsap.set(".endline",{scaleX:0,opacity:1});
+  gsap.set(".logo-wrap img.base",{opacity:0});
+  gsap.set(".tagline, .handle",{opacity:0,y:20});
+  tl.to(".endline",{scaleX:1,duration:0.25,ease:"power4.out"},8.2);
+  tl.to(".endline",{opacity:0,duration:0.15},8.48);
+  var et=[8.45,8.5,8.55,8.6,8.65];
+  et.forEach(function(t,i){
+    tl.set(".logo-wrap img.base",{opacity:i%2?0.4:1,x:(i%2?10:-6)},t);
+    tl.set(".logo-wrap img.r",{opacity:0.7,x:(i%2?-18:14),filter:"drop-shadow(0 0 0 #f00) hue-rotate(0deg)"},t);
+    tl.set(".logo-wrap img.c",{opacity:0.6,x:(i%2?16:-12)},t);
+  });
+  tl.set(".logo-wrap img.base",{opacity:1,x:0},8.72);
+  tl.set(".logo-wrap img.r, .logo-wrap img.c",{opacity:0,x:0},8.72);
+  tl.to(".tagline, .handle",{opacity:1,y:0,duration:0.4,ease:"power3.out",stagger:0.1},8.85);
+
+  window.__timelines["client-style"]=tl;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,503 @@
+from fastapi import APIRouter, Depends, HTTPException, status, Query
+from sqlalchemy.orm import Session
+from sqlalchemy import func, or_
+import os
+import uuid
+from datetime import datetime, timezone
+from typing import Optional
+from ..database import get_db
+from ..middleware.auth import get_current_user
+from ..models.user import User
+from ..models.folder import Folder, STYLE_SAMPLES_FOLDER
+from ..models.asset import Asset, AssetVersion, MediaFile, AssetType, FileType, ProcessingStatus, AssetStatus
+from ..models.project import Project, ProjectMember, ProjectRole
+from ..models.share import AssetShare
+from ..models.activity import Mention, Notification, NotificationType
+from ..schemas.asset import AssetResponse, AssetVersionResponse, AssetUpdate, StreamUrlResponse, MediaFileResponse
+from ..schemas.notification import AssignmentUpdate
+from ..services.permissions import require_project_role, require_asset_access, can_access_asset, is_public_project, get_project_member
+from ..services.s3_service import generate_presigned_get_url, build_download_filename
+from .hls_proxy import create_hls_token
+from ..schemas.upload import (
+    InitiateUploadRequest, InitiateUploadResponse,
+    ALLOWED_MIME_TYPES, CHUNK_SIZE_BYTES, mime_to_asset_type,
+)
+from ..services.storage import upload_guard_error
+from ..services.versions import next_version_number
+from ..services.s3_service import create_multipart_upload
+
+router = APIRouter(tags=["assets"])
+
+
+# A version in one of these is not something a viewer can open: it is an upload in
+# flight or one that died. It is still the newest version by number, which is why
+# "latest" and "the one to show" are not the same question.
+_UNVIEWABLE_STATUSES = (ProcessingStatus.uploading, ProcessingStatus.failed)
+
+
+def _pick_version(db: Session, asset_id: uuid.UUID, preferred) -> AssetVersion | None:
+    """Newest version matching `preferred`, falling back to the newest overall.
+
+    The fallback is what keeps a brand new asset honest: with nothing preferable to
+    show it still reports the version that is uploading, rather than reporting
+    nothing at all.
+    """
+    base = (AssetVersion.asset_id == asset_id, AssetVersion.deleted_at.is_(None))
+    hit = db.query(AssetVersion).filter(*base, preferred).order_by(
+        AssetVersion.version_number.desc()
+    ).first()
+    if hit:
+        return hit
+    return db.query(AssetVersion).filter(*base).order_by(
+        AssetVersion.version_number.desc()
+    ).first()
+
+
+def _display_version(db: Session, asset_id: uuid.UUID) -> AssetVersion | None:
+    """The version to show for an asset in a listing or detail view.
+
+    An interrupted v2 no longer makes an approved, viewable v1 read as failed for
+    the whole reaper window. `processing` counts as showable, because "this one is
+    being worked on" is true and useful.
+    """
+    return _pick_version(
+        db, asset_id, AssetVersion.processing_status.notin_(_UNVIEWABLE_STATUSES)
+    )
+
+
+def _playable_version(db: Session, asset_id: uuid.UUID) -> AssetVersion | None:
+    """The version to serve when a caller asked for the asset without naming one.
+
+    Stricter than `_display_version`: only `ready` can actually be streamed or
+    downloaded, so a v2 that is merely processing must not shadow a v1 that plays.
+    """
+    return _pick_version(
+        db, asset_id, AssetVersion.processing_status == ProcessingStatus.ready
+    )
+
+
+def _build_asset_response(asset: Asset, db: Session) -> AssetResponse:
+    """Build AssetResponse with latest version and its files."""
+    latest_version = _display_version(db, asset.id)
+
+    version_response = None
+    thumbnail_url = None
+    if latest_version:
+        files = db.query(MediaFile).filter(MediaFile.version_id == latest_version.id).all()
+        version_response = AssetVersionResponse.model_validate(latest_version)
+        version_response.files = [MediaFileResponse.model_validate(f) for f in files]
+        # Get thumbnail from first file that has one.
+        # Audio stores waveform JSON in s3_key_thumbnail — skip it, it's not an image.
+        if asset.asset_type != AssetType.audio:
+            for f in files:
+                if f.s3_key_thumbnail:
+                    thumbnail_url = generate_presigned_get_url(f.s3_key_thumbnail)
+                    break
+
+    resp = AssetResponse.model_validate(asset)
+    resp.latest_version = version_response
+    resp.thumbnail_url = thumbnail_url
+    return resp
+
+
+def _build_asset_responses_bulk(assets: list[Asset], db: Session) -> list[AssetResponse]:
+    """Build AssetResponse list with bulk-loaded versions and files (no N+1)."""
+    if not assets:
+        return []
+
+    asset_ids = [a.id for a in assets]
+
+    # Bulk load the version to display per asset, matching _display_version: the
+    # newest viewable one, falling back to the newest overall. Two grouped queries
+    # rather than one, still no N+1.
+    def _max_version_rows(viewable_only: bool):
+        q = db.query(
+            AssetVersion.asset_id,
+            func.max(AssetVersion.version_number).label("max_version"),
+        ).filter(AssetVersion.asset_id.in_(asset_ids), AssetVersion.deleted_at.is_(None))
+        if viewable_only:
+            q = q.filter(AssetVersion.processing_status.notin_(_UNVIEWABLE_STATUSES))
+        subq = q.group_by(AssetVersion.asset_id).subquery()
+        return (
+            db.query(AssetVersion)
+            .join(
+                subq,
+                (AssetVersion.asset_id == subq.c.asset_id)
+                & (AssetVersion.version_number == subq.c.max_version),
+            )
+            .all()
+        )
+
+    version_by_asset = {v.asset_id: v for v in _max_version_rows(viewable_only=False)}
+    # Viewable wins where one exists; the fallback above covers assets with none.
+    version_by_asset.update({v.asset_id: v for v in _max_version_rows(viewable_only=True)})
+    latest_versions = list(version_by_asset.values())
+
+    # Bulk load media files for all those versions
+    version_ids = [v.id for v in latest_versions]
+    all_files = db.query(MediaFile).filter(MediaFile.version_id.in_(version_ids)).all() if version_ids else []
+    files_by_version: dict = {}
+    for f in all_files:
+        files_by_version.setdefault(f.version_id, []).append(f)
+
+    result = []
+    for asset in assets:
+        version = version_by_asset.get(asset.id)
+        version_response = None
+        thumbnail_url = None
+        if version:
+            files = files_by_version.get(version.id, [])
+            version_response = AssetVersionResponse.model_validate(version)
+            version_response.files = [MediaFileResponse.model_validate(f) for f in files]
+            # Audio stores waveform JSON in s3_key_thumbnail — skip it, it's not an image.
+            if asset.asset_type != AssetType.audio:
+                for f in files:
+                    if f.s3_key_thumbnail:
+                        thumbnail_url = generate_presigned_get_url(f.s3_key_thumbnail)
+                        break
+
+        asset_resp = AssetResponse.model_validate(asset)
+        asset_resp.latest_version = version_response
+        asset_resp.thumbnail_url = thumbnail_url
+        result.append(asset_resp)
+    return result
+
+
+@router.get("/projects/{project_id}/assets", response_model=list[AssetResponse])
+def list_assets(
+    project_id: uuid.UUID,
+    include_failed: bool = Query(False, description="Include assets whose latest version failed processing"),
+    folder_id: Optional[str] = Query(None, description="Filter by folder. 'root' for root level, UUID for specific folder."),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    # Allow access if user is a project member OR the project is public
+    member = get_project_member(db, project_id, current_user.id)
+    if not member and not is_public_project(db, project_id):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a project member")
+
+    query = db.query(Asset).filter(
+        Asset.project_id == project_id,
+        Asset.deleted_at.is_(None),
+    )
+
+    if folder_id == "root":
+        query = query.filter(Asset.folder_id.is_(None))
+    elif folder_id is not None:
+        query = query.filter(Asset.folder_id == uuid.UUID(folder_id))
+    else:
+        # Style sample renders live in a reserved folder and are not part of the project's own videos.
+        hidden = db.query(Folder.id).filter(
+            Folder.project_id == project_id, Folder.parent_id.is_(None),
+            Folder.name == STYLE_SAMPLES_FOLDER, Folder.deleted_at.is_(None),
+        )
+        query = query.filter(or_(Asset.folder_id.is_(None), Asset.folder_id.notin_(hidden)))
+
+    assets = query.all()
+
+    if not include_failed:
+        # Exclude assets where the only version is failed or still uploading
+        asset_ids = [a.id for a in assets]
+        if asset_ids:
+            # Find assets that have at least one non-failed, non-uploading version
+            usable = set(
+                row[0] for row in db.query(AssetVersion.asset_id).filter(
+                    AssetVersion.asset_id.in_(asset_ids),
+                    AssetVersion.deleted_at.is_(None),
+                    AssetVersion.processing_status.notin_([ProcessingStatus.failed, ProcessingStatus.uploading]),
+                ).distinct().all()
+            )
+            # Also include assets with no versions yet (just created)
+            has_any_version = set(
+                row[0] for row in db.query(AssetVersion.asset_id).filter(
+                    AssetVersion.asset_id.in_(asset_ids),
+                    AssetVersion.deleted_at.is_(None),
+                ).distinct().all()
+            )
+            assets = [a for a in assets if a.id in usable or a.id not in has_any_version]
+
+    return _build_asset_responses_bulk(assets, db)
+
+
+@router.get("/assets/{asset_id}", response_model=AssetResponse)
+def get_asset(
+    asset_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.deleted_at.is_(None)).first()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    require_asset_access(db, asset, current_user)
+    from ..services.cf_feedback import latest_info
+
+    response = _build_asset_response(asset, db)
+    response.feedback_run = latest_info(db, asset.id)
+    return response
+
+
+@router.patch("/assets/{asset_id}", response_model=AssetResponse)
+def update_asset(
+    asset_id: uuid.UUID,
+    body: AssetUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.deleted_at.is_(None)).first()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    require_project_role(db, asset.project_id, current_user, ProjectRole.editor)
+    for field, value in body.model_dump(exclude_unset=True).items():
+        setattr(asset, field, value)
+    db.commit()
+    db.refresh(asset)
+    return _build_asset_response(asset, db)
+
+
+@router.delete("/assets/{asset_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_asset(
+    asset_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.deleted_at.is_(None)).first()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    require_project_role(db, asset.project_id, current_user, ProjectRole.editor)
+    asset.deleted_at = datetime.now(timezone.utc)
+    db.commit()
+
+
+@router.get("/assets/{asset_id}/versions", response_model=list[AssetVersionResponse])
+def list_asset_versions(
+    asset_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.deleted_at.is_(None)).first()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    require_asset_access(db, asset, current_user)
+
+    versions = db.query(AssetVersion).filter(
+        AssetVersion.asset_id == asset_id,
+        AssetVersion.deleted_at.is_(None),
+    ).order_by(AssetVersion.version_number.desc()).all()
+
+    result = []
+    version_ids = [v.id for v in versions]
+    all_files = db.query(MediaFile).filter(MediaFile.version_id.in_(version_ids)).all() if version_ids else []
+    files_by_version: dict = {}
+    for f in all_files:
+        files_by_version.setdefault(f.version_id, []).append(f)
+
+    for v in versions:
+        vr = AssetVersionResponse.model_validate(v)
+        vr.files = [MediaFileResponse.model_validate(f) for f in files_by_version.get(v.id, [])]
+        result.append(vr)
+    return result
+
+
+@router.get("/assets/{asset_id}/stream", response_model=StreamUrlResponse)
+def get_stream_url(
+    asset_id: uuid.UUID,
+    version_id: Optional[uuid.UUID] = Query(default=None),
+    download: bool = Query(default=False),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.deleted_at.is_(None)).first()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    require_asset_access(db, asset, current_user)
+
+    # Get the requested version or latest
+    if version_id:
+        version = db.query(AssetVersion).filter(
+            AssetVersion.id == version_id,
+            AssetVersion.asset_id == asset_id,
+            AssetVersion.deleted_at.is_(None),
+        ).first()
+    else:
+        # With no version asked for, serve the newest one that can actually play.
+        # Picking the highest-numbered version regardless meant an upload in flight,
+        # or one that died, made every earlier version unplayable: the newest was
+        # selected and then rejected as not ready, with no way to reach v1 short of
+        # naming its id. The share-side viewer already resolves it this way.
+        version = _playable_version(db, asset_id)
+
+    if not version:
+        raise HTTPException(status_code=404, detail="No version found")
+    if version.processing_status != ProcessingStatus.ready:
+        raise HTTPException(status_code=409, detail="Asset version is not ready yet")
+
+    media_file = db.query(MediaFile).filter(MediaFile.version_id == version.id).first()
+    if not media_file:
+        raise HTTPException(status_code=404, detail="Media file not found")
+
+    if asset.asset_type == AssetType.video and media_file.s3_key_processed:
+        if download:
+            # A download needs one file, and the ladder is segments. Prefer the
+            # MP4 remuxed from the top rung: it is what the reviewer watched,
+            # where the raw file is the camera master and can be an order of
+            # magnitude larger. Versions transcoded before that rung existed
+            # (and any whose remux failed) have none, and still get the master.
+            s3_key = (
+                media_file.s3_key_download
+                or media_file.s3_key_raw
+                or media_file.s3_key_processed
+            )
+            filename = build_download_filename(asset.name, s3_key, media_file.original_filename)
+            url = generate_presigned_get_url(s3_key, download_filename=filename)
+        else:
+            # Route through the HLS proxy so the master playlist, variant
+            # playlists, and .ts segments all get served via short-lived
+            # presigned URLs — the S3 bucket can stay fully private. (#51)
+            token = create_hls_token(media_file.s3_key_processed)
+            url = f"/stream/hls/master.m3u8?token={token}"
+    else:
+        s3_key = media_file.s3_key_processed or media_file.s3_key_raw
+        if download:
+            filename = build_download_filename(asset.name, s3_key, media_file.original_filename)
+            url = generate_presigned_get_url(s3_key, download_filename=filename)
+        else:
+            url = generate_presigned_get_url(s3_key)
+
+    return StreamUrlResponse(url=url, asset_type=asset.asset_type)
+
+
+@router.post("/assets/{asset_id}/versions", response_model=InitiateUploadResponse)
+def initiate_new_version(
+    asset_id: uuid.UUID,
+    body: InitiateUploadRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Initiate upload of a new version for an existing asset."""
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.deleted_at.is_(None)).first()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    require_project_role(db, asset.project_id, current_user, ProjectRole.editor)
+
+    if body.project_id != asset.project_id:
+        raise HTTPException(400, "Project does not match asset")
+    if body.artifact_key:
+        # Serialize reservation and retry on this asset. The opaque artifact identity is
+        # stored in the existing original filename, so lost responses need no new table.
+        db.query(Asset).filter(Asset.id == asset_id).with_for_update().one()
+        ext = os.path.splitext(body.original_filename)[1].lower()
+        body.original_filename = f"cf-review-{body.artifact_key}{ext}"
+        prior = db.query(AssetVersion, MediaFile).join(MediaFile, MediaFile.version_id == AssetVersion.id).filter(
+            AssetVersion.asset_id == asset_id, AssetVersion.created_by == current_user.id,
+            MediaFile.original_filename == body.original_filename,
+        ).first()
+        if prior:
+            version, media = prior
+            if version.deleted_at or media.file_size_bytes != body.file_size_bytes or media.mime_type != body.mime_type:
+                raise HTTPException(409, "Artifact identity was already used or removed")
+            return InitiateUploadResponse(
+                upload_id=version.upload_id or "", s3_key=media.s3_key_raw, asset_id=asset_id,
+                version_id=version.id, chunk_size_bytes=version.chunk_size_bytes or CHUNK_SIZE_BYTES,
+                processing_status=version.processing_status, resumed=True,
+            )
+
+    if body.mime_type not in ALLOWED_MIME_TYPES:
+        raise HTTPException(status_code=400, detail="Unsupported file type")
+    guard_error = upload_guard_error(db, body.file_size_bytes)
+    if guard_error:
+        raise HTTPException(status_code=400, detail=guard_error)
+
+    next_version = next_version_number(db, asset_id)
+
+    # Creative Flo: an approval (or rejection) belongs to the footage that was reviewed. New footage
+    # goes back to review, so nobody can slip a new version under an earlier human approval.
+    if asset.status in (AssetStatus.approved, AssetStatus.rejected):
+        asset.status = AssetStatus.in_review
+
+    version = AssetVersion(
+        asset_id=asset_id,
+        version_number=next_version,
+        processing_status=ProcessingStatus.uploading,
+        created_by=current_user.id,
+    )
+    db.add(version)
+    db.flush()
+
+    ext = os.path.splitext(body.original_filename)[1].lower()
+    s3_key = f"raw/{asset.project_id}/{asset_id}/{version.id}/original{ext}"
+    upload_id = create_multipart_upload(s3_key, body.mime_type)
+
+    # Record which S3 upload backs this version. Without it nothing server-side can
+    # map a version to its multipart upload, so the reaper has to sweep the whole
+    # bucket and presign-part has nothing to validate against.
+    version.upload_id = upload_id
+    version.last_activity_at = datetime.now(timezone.utc)
+    # See initiate_upload: the part size belongs to the upload, not to the build
+    # of the client that happens to be pushing it.
+    version.chunk_size_bytes = CHUNK_SIZE_BYTES
+
+    file_type_map = {AssetType.image: FileType.image, AssetType.audio: FileType.audio, AssetType.video: FileType.video, AssetType.image_carousel: FileType.image}
+    media_file = MediaFile(
+        version_id=version.id,
+        file_type=file_type_map.get(asset.asset_type, FileType.video),
+        original_filename=body.original_filename,
+        mime_type=body.mime_type,
+        file_size_bytes=body.file_size_bytes,
+        s3_key_raw=s3_key,
+    )
+    db.add(media_file)
+    db.commit()
+
+    return InitiateUploadResponse(
+        upload_id=upload_id,
+        s3_key=s3_key,
+        asset_id=asset_id,
+        version_id=version.id,
+        chunk_size_bytes=CHUNK_SIZE_BYTES,
+    )
+
+
+@router.patch("/assets/{asset_id}/assignment", response_model=AssetResponse)
+def update_assignment(
+    asset_id: uuid.UUID,
+    body: AssignmentUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.deleted_at.is_(None)).first()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    require_project_role(db, asset.project_id, current_user, ProjectRole.editor)
+
+    if "assignee_id" in body.model_fields_set:
+        asset.assignee_id = body.assignee_id
+    if "due_date" in body.model_fields_set:
+        asset.due_date = body.due_date
+
+    if "assignee_id" in body.model_fields_set and body.assignee_id is not None:
+        notification = Notification(
+            user_id=body.assignee_id,
+            type=NotificationType.assignment,
+            asset_id=asset.id,
+        )
+        db.add(notification)
+
+    db.commit()
+    db.refresh(asset)
+    return _build_asset_response(asset, db)
+
+
+@router.get("/assets/{asset_id}/assignment")
+def get_assignment(
+    asset_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    asset = db.query(Asset).filter(Asset.id == asset_id, Asset.deleted_at.is_(None)).first()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    require_project_role(db, asset.project_id, current_user, ProjectRole.viewer)
+    return {
+        "assignee_id": str(asset.assignee_id) if asset.assignee_id else None,
+        "due_date": asset.due_date.isoformat() if asset.due_date else None,
+    }

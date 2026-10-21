@@ -1,0 +1,386 @@
+{
+  "sections": {
+    "brand": {
+      "fields": {
+        "brand": {
+          "type": "text"
+        },
+        "style_name": {
+          "type": "text"
+        },
+        "handle": {
+          "type": "text"
+        },
+        "sell": {
+          "type": "textarea"
+        },
+        "price_range": {
+          "type": "text"
+        },
+        "audience": {
+          "type": "chips",
+          "options": [
+            "Business owners",
+            "Aspiring entrepreneurs",
+            "Consumers / shoppers",
+            "Professionals / B2B",
+            "Creators",
+            "Local community",
+            "Students"
+          ]
+        },
+        "transformation": {
+          "type": "textarea"
+        },
+        "feel": {
+          "type": "text"
+        },
+        "action": {
+          "type": "text"
+        },
+        "cta_keyword": {
+          "type": "text"
+        },
+        "refs": {
+          "type": "list"
+        },
+        "avoid_refs": {
+          "type": "list"
+        },
+        "color1": {
+          "type": "color"
+        },
+        "color2": {
+          "type": "color"
+        },
+        "colorsMode": {
+          "type": "single",
+          "options": [
+            "Use these colors",
+            "No brand colors yet"
+          ]
+        },
+        "reference_videos": {
+          "type": "list",
+          "max_items": 3
+        }
+      },
+      "samples": []
+    },
+    "platforms": {
+      "fields": {
+        "platforms": {
+          "type": "chips",
+          "options": [
+            "IG Reels",
+            "TikTok",
+            "YouTube Shorts",
+            "YouTube long-form",
+            "LinkedIn",
+            "X",
+            "Ads",
+            "Course / community"
+          ]
+        },
+        "formats": {
+          "type": "chips",
+          "options": [
+            "Vertical 9:16 (Reels, TikTok, Shorts)",
+            "Horizontal 16:9 (YouTube)",
+            "Square / 4:5 (feed)"
+          ]
+        },
+        "frequency": {
+          "type": "text"
+        }
+      },
+      "samples": []
+    },
+    "templates": {
+      "fields": {},
+      "samples": []
+    },
+    "looks": {
+      "fields": {},
+      "samples": [
+        "look-noir",
+        "look-keynote",
+        "look-hud",
+        "look-kinetic",
+        "look-glass",
+        "look-doc",
+        "look-editorial",
+        "look-ugc",
+        "look-whiteboard",
+        "look-brutal"
+      ]
+    },
+    "type": {
+      "fields": {},
+      "samples": [
+        "type-archivo",
+        "type-michroma",
+        "type-orbitron",
+        "type-cormorant",
+        "type-instrument",
+        "type-anton",
+        "type-unbounded",
+        "type-chakra",
+        "type-syne",
+        "type-shoulders",
+        "type-playfair",
+        "type-bebas",
+        "type-fraunces",
+        "type-montserrat",
+        "type-caveat",
+        "type-mono",
+        "type-rounded"
+      ]
+    },
+    "captions": {
+      "fields": {},
+      "samples": [
+        "cap-pop",
+        "cap-kara",
+        "cap-cine",
+        "cap-stack",
+        "cap-hud",
+        "cap-key",
+        "cap-boxed",
+        "cap-lower",
+        "cap-color",
+        "cap-emoji",
+        "cap-none"
+      ]
+    },
+    "hooks": {
+      "fields": {
+        "hook_styles": {
+          "type": "chips",
+          "options": [
+            "Bold claim",
+            "Question",
+            "Result first",
+            "Story cold open",
+            "Pattern interrupt visual",
+            "On-screen hook text"
+          ]
+        },
+        "hook_energy": {
+          "type": "range",
+          "max": 5
+        },
+        "chaptering": {
+          "type": "single",
+          "options": [
+            "No chapters",
+            "Subtle labels",
+            "Full chapter cards"
+          ]
+        },
+        "end_tag": {
+          "type": "chips",
+          "options": [
+            "Logo end tag",
+            "Handle and tagline",
+            "Keyword card",
+            "Link in bio card",
+            "Book a call card",
+            "No end card"
+          ]
+        },
+        "cta": {
+          "type": "chips",
+          "options": [
+            "Comment a keyword",
+            "Link in bio",
+            "DM me",
+            "Follow for more",
+            "Book a call",
+            "No CTA"
+          ]
+        },
+        "motif": {
+          "type": "chips",
+          "options": [
+            "Logo end tag",
+            "A color flash / light line",
+            "A glitch tag",
+            "A sound / audio sting",
+            "A recurring prop or object"
+          ]
+        },
+        "motifNote": {
+          "type": "text"
+        }
+      },
+      "samples": [
+        "hook-claim",
+        "hook-question",
+        "hook-result",
+        "hook-story",
+        "hook-interrupt",
+        "hook-text"
+      ]
+    },
+    "transitions": {
+      "fields": {},
+      "samples": [
+        "tr-whip",
+        "tr-punch",
+        "tr-leak",
+        "tr-glitch",
+        "tr-match",
+        "tr-mask",
+        "tr-zoomblur",
+        "tr-hardcut"
+      ]
+    },
+    "motion": {
+      "fields": {
+        "graphics_intensity": {
+          "type": "range",
+          "max": 5
+        },
+        "card_tiers": {
+          "type": "single",
+          "options": [
+            "Full-screen takeovers",
+            "Cards that keep my face visible",
+            "A mix of both"
+          ]
+        },
+        "broll_sources": {
+          "type": "chips",
+          "options": [
+            "Own footage",
+            "Stock",
+            "AI generated",
+            "Screen recordings",
+            "Memes"
+          ]
+        },
+        "zoom_frequency": {
+          "type": "single",
+          "options": [
+            "Rarely",
+            "On key points",
+            "Often"
+          ]
+        },
+        "stickers": {
+          "type": "bool",
+          "options": [
+            "Yes",
+            "No"
+          ]
+        },
+        "sound_text": {
+          "type": "bool",
+          "options": [
+            "Yes",
+            "No"
+          ]
+        }
+      },
+      "samples": [
+        "motion-takeover",
+        "motion-face"
+      ]
+    },
+    "grade": {
+      "fields": {},
+      "samples": [
+        "grade-teal",
+        "grade-bleach",
+        "grade-mono",
+        "grade-neon",
+        "grade-kodak",
+        "grade-natural"
+      ]
+    },
+    "music": {
+      "fields": {
+        "music": {
+          "type": "chips",
+          "options": [
+            "Cinematic score",
+            "Dark trap / drill",
+            "Synthwave / electronic",
+            "Orchestral hybrid",
+            "Minimal lo-fi",
+            "Soulful / boom bap",
+            "Upbeat pop / indie",
+            "Acoustic / warm",
+            "Afrobeats",
+            "House",
+            "Piano emotional",
+            "No music"
+          ]
+        },
+        "music_energy": {
+          "type": "range",
+          "max": 5
+        },
+        "music_under": {
+          "type": "single",
+          "options": [
+            "low",
+            "medium",
+            "off"
+          ]
+        },
+        "sound_design": {
+          "type": "chips",
+          "options": [
+            "Whooshes",
+            "Risers",
+            "Hits",
+            "Clicks",
+            "Record scratch",
+            "Silence for emphasis"
+          ]
+        },
+        "sfx_density": {
+          "type": "range",
+          "max": 5
+        }
+      },
+      "samples": []
+    },
+    "pace": {
+      "fields": {
+        "pace": {
+          "type": "range",
+          "max": 10
+        },
+        "oncam": {
+          "type": "single",
+          "options": [
+            "Face the whole time",
+            "Face + heavy B-roll",
+            "Mostly visuals, my voice",
+            "No face, voiceover only",
+            "Depends on the format"
+          ]
+        }
+      },
+      "samples": [
+        "density-minimal",
+        "density-balanced",
+        "density-heavy"
+      ]
+    },
+    "other": {
+      "fields": {
+        "perfect_video": {
+          "type": "textarea"
+        },
+        "hate": {
+          "type": "textarea"
+        }
+      },
+      "samples": []
+    }
+  }
+}

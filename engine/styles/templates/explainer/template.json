@@ -1,0 +1,42 @@
+{
+  "key": "explainer",
+  "name": "Visual Explainer",
+  "summary": "The voice tells a story and the screen builds it out of paper: cut-out photos, a blue highlighter shape, serif headlines, arrows and sourced stat cards snap in on stepped stop-motion as each word is spoken.",
+  "best_for": "Educators, analysts, finance and history explainers, researchers, and brands explaining why something works. 45-90 second idea-led videos, with or without a face.",
+  "why_it_works": "The hook is a question or surprising fact on a stacked headline in the first 2s, and the answer is withheld until the last 20%, so the open loop carries the whole video. Elements build onto the same plate every 1.5-2.5s, which feels like progress and rewards watching. Stepped stop-motion is a texture most feeds never show, which is itself a pattern interrupt. Short boxed-keyword captions (max 26 characters per line) keep reading effortless while the visuals do the teaching.",
+  "tags": [
+    "explainer",
+    "paper collage",
+    "education",
+    "stats",
+    "storytelling",
+    "voiceover",
+    "research"
+  ],
+  "sort": 30,
+  "preview": {
+    "palette": [
+      "#efe9dc",
+      "#17130e",
+      "#37BDF8",
+      "#e23b2e",
+      "#f26a1b"
+    ],
+    "fonts": [
+      "Fraunces",
+      "Manrope"
+    ],
+    "caption_sample": "The reason why is not what you think",
+    "caption_style": "Boxed highlight",
+    "transitions": [
+      "Iris / mask reveal",
+      "Hard cuts only"
+    ],
+    "music_beds": [
+      "Minimal lo-fi",
+      "Orchestral hybrid"
+    ],
+    "pace": 4,
+    "motion_sample": "On warm paper, a cut-out photo with a white outline snaps in on stepped frames, a blue circle scales up behind it, a bold serif headline stamps in and a marker swipe highlights one word."
+  }
+}

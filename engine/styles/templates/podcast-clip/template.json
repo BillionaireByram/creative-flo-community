@@ -1,0 +1,41 @@
+{
+  "key": "podcast-clip",
+  "name": "Podcast Clip",
+  "summary": "The best 30-60 seconds of a long conversation, cut vertical: the active speaker always on screen, stacked two-shots for back-and-forth, lowercase native captions and one screenshot-worthy quote card.",
+  "best_for": "Podcasters, interview and panel shows, live-stream hosts, coaches who record calls, and brands repurposing long conversations into clips of one strong idea, story or disagreement.",
+  "why_it_works": "Opening on the most quotable line (lifted from inside the clip if needed) gives the viewer the best moment in the first 3s, then cutting back to the start of the thought opens a loop they wait to see closed. Cutting to whoever speaks within 6 frames keeps faces and reactions moving. Short lowercase phrases read like a native post, and the quote card every clip is the pattern interrupt that also gets screenshotted and shared.",
+  "tags": [
+    "podcast",
+    "interview",
+    "repurpose",
+    "conversation",
+    "quote cards",
+    "captions",
+    "long-form clips"
+  ],
+  "sort": 80,
+  "preview": {
+    "palette": [
+      "#111111",
+      "#FFFFFF",
+      "#FF5A36",
+      "#F3EEE7",
+      "#3A3A3A"
+    ],
+    "fonts": [
+      "Instrument Serif",
+      "Archivo"
+    ],
+    "caption_sample": "that was the moment i knew",
+    "caption_style": "Lowercase native",
+    "transitions": [
+      "Hard cuts only"
+    ],
+    "music_beds": [
+      "No music",
+      "Minimal lo-fi"
+    ],
+    "pace": 3,
+    "motion_sample": "Two stacked face placeholders split by a thin orange line, lowercase captions change in two-word phrases on the seam, then a dark quote card with an italic serif line slides up into the top band."
+  }
+}

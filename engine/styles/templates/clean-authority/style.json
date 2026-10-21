@@ -1,0 +1,29 @@
+{
+  "client": "clean-authority",
+  "brand": "Clean Authority",
+  "handle": "",
+  "look": "look-keynote",
+  "type": "type-cormorant",
+  "display": "Cormorant Garamond",
+  "body": "Manrope",
+  "caption": "cap-cine",
+  "transition": "flash",
+  "transition_id": "tr-match",
+  "grade": "grade-mono",
+  "density": "density-minimal",
+  "accent": "#C9A96E",
+  "highlight": "#F2EDE4",
+  "base": "#0E0E0E",
+  "card": "solid",
+  "logo": "",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "tagline": "",
+  "music": [
+    "Minimal lo-fi",
+    "Cinematic score"
+  ],
+  "pace": 3,
+  "oncam": "Face the whole time"
+}

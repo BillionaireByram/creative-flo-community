@@ -1,0 +1,49 @@
+{
+  "client": "story-explainer",
+  "brand": "Story Explainer",
+  "look": "look-explainer",
+  "type": "type-inter-italic",
+  "display": "Inter",
+  "body": "Inter",
+  "caption": "cap-kinetic",
+  "transition": "cut",
+  "transition_id": "tr-cut",
+  "grade": "grade-cine",
+  "density": "density-story",
+  "accent": "#F5C542",
+  "highlight": "#F5C542",
+  "base": "#0B0A08",
+  "paper": "#F2EADB",
+  "card": "paper",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "music": [
+    "Chill-hop instrumental (chill-a), mixed low under story lines"
+  ],
+  "pace": 5,
+  "oncam": "Real camera; AI only for B-roll where the speaker is off screen",
+  "skins": {
+    "story": {
+      "base": "#0B0A08",
+      "accent": "#F5C542",
+      "highlight": "#F5C542"
+    }
+  },
+  "skin": "story",
+  "broll_model": "bytedance/seedance-2-5",
+  "kinetic": {
+    "module": "pipeline/kinetic.py",
+    "theme": "italic",
+    "accent": "#F5C542"
+  },
+  "explainers": {
+    "module": "pipeline/explainkit.py",
+    "share_of_runtime": "about 30%",
+    "looks": [
+      "paper: books, quotes",
+      "glass: diagrams, lists, loops"
+    ]
+  },
+  "end_tag": false
+}

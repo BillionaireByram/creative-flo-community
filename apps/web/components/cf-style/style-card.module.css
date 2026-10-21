@@ -1,0 +1,14 @@
+.motion { position: relative; display: grid; place-content: center; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; color: #fff; background: var(--sample-bg, #0b111b); isolation: isolate; }
+.motion::before { content: ''; position: absolute; width: 65%; aspect-ratio: 1; right: -20%; top: -50%; border-radius: 50%; background: var(--sample-color, #d9b26a); opacity: .4; filter: blur(30px); animation: drift var(--sample-duration, 6s) ease-in-out infinite alternate; }
+.motion strong { z-index: 1; padding: 24px; font-size: clamp(20px, 3vw, 36px); text-align: center; white-space: pre-line; line-height: 1.15; overflow-wrap: anywhere; text-shadow: 0 2px 8px #000; animation: enter var(--sample-duration, 6s) ease-in-out infinite; }
+.motion[data-treatment*='pop'] strong { text-transform: uppercase; animation-name: pop; }
+.motion[data-treatment*='kara'] strong, .motion[data-treatment*='highlight'] strong { text-decoration: underline; text-decoration-color: var(--sample-color); text-decoration-thickness: 5px; }
+.motion[data-treatment*='none'] strong { visibility: hidden; }
+.caption { padding: 16px; background: var(--bg-tertiary); border-radius: 10px; overflow-wrap: anywhere; }
+.caption[data-treatment*='pop'] { font-weight: 900; text-transform: uppercase; }
+.caption[data-treatment*='kara'], .caption[data-treatment*='highlight'] { text-decoration: underline; text-decoration-color: var(--sample-color); text-decoration-thickness: 3px; }
+.caption[data-treatment*='color'] { border-left: 4px solid var(--sample-color); }
+@keyframes drift { to { transform: translate(-80%, 70%) scale(1.2); } }
+@keyframes enter { 0%, 100% { opacity: .4; transform: translateY(10px); } 20%, 80% { opacity: 1; transform: none; } }
+@keyframes pop { 0%, 100% { transform: scale(.96); } 20%, 80% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .motion::before, .motion strong { animation: none; } }

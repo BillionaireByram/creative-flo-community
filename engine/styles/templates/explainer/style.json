@@ -1,0 +1,29 @@
+{
+  "client": "explainer",
+  "brand": "Visual Explainer",
+  "handle": "",
+  "look": "look-editorial",
+  "type": "type-fraunces",
+  "display": "Fraunces",
+  "body": "Manrope",
+  "caption": "cap-boxed",
+  "transition": "flash",
+  "transition_id": "tr-mask",
+  "grade": "grade-natural",
+  "density": "density-heavy",
+  "accent": "#e23b2e",
+  "highlight": "#37BDF8",
+  "base": "#17130e",
+  "card": "paper",
+  "logo": "",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "tagline": "",
+  "music": [
+    "Minimal lo-fi",
+    "Orchestral hybrid"
+  ],
+  "pace": 7,
+  "oncam": "Mostly visuals, my voice"
+}

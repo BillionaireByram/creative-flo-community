@@ -1,0 +1,68 @@
+{
+  "$schema": "../registry.schema.json",
+  "id": "dimensional",
+  "name": "Dimensional",
+  "number": "03",
+  "status": "draft",
+  "inspiration": "Studied from short-form motion work circulating Oct 2026 (compound.mov promo reels): chrome display type turning inside a tunnel of screens, instrument-style ring readouts with a lens fringe, and the creator's own posts floating in 3D as social proof. Original cards, built from the ideas rather than the assets.",
+  "summary": "Objects in space. Real CSS perspective, polished chrome type, thin instrument linework with an RGB lens fringe, on a near-black canvas. Use when the subject should feel engineered and expensive rather than friendly.",
+  "palette": {
+    "bg": "#050507",
+    "fg": "#FFFFFF",
+    "accent": "#79C8FF",
+    "notes": "Colour is almost absent on purpose. The chrome ramp and the warm/cool fringe pair ARE the palette; the blue accent is for live readouts only. Mirror into tokens.css."
+  },
+  "fonts": {
+    "display": "Archivo",
+    "body": "Inter",
+    "mono": "Space Mono"
+  },
+  "motion": "Heavy and slow. Big objects arrive on expo.out over 1.2-1.8s and settle; nothing snaps. Idle drift is sine.inOut on mismatched periods so floats never bob in unison.",
+  "transitions": "Push in from depth (z) rather than slide in from an edge. Exits pull back into the throat.",
+  "cards": [
+    {
+      "id": "dimensional.t1.section.chrometunnel",
+      "tier": "tier1",
+      "purpose": "section",
+      "file": "cards/tier1/t1-section-chrometunnel.html",
+      "slots": [
+        { "name": "kicker", "type": "text", "maxChars": 22 },
+        { "name": "headline", "type": "text", "maxChars": 14 }
+      ],
+      "duration": { "min": 5, "max": 9 },
+      "notes": "Headline reads best as ONE word. Two short words fit; a phrase will not.",
+      "preview": { "mp4": "preview/dimensional.t1.section.chrometunnel.mp4", "poster": "preview/dimensional.t1.section.chrometunnel.png" }
+    },
+    {
+      "id": "dimensional.t1.stat.signalfield",
+      "tier": "tier1",
+      "purpose": "stat",
+      "file": "cards/tier1/t1-stat-signalfield.html",
+      "slots": [
+        { "name": "label", "type": "text", "maxChars": 18 },
+        { "name": "stat", "type": "text", "maxChars": 7 },
+        { "name": "caption", "type": "text", "maxChars": 46 }
+      ],
+      "duration": { "min": 6, "max": 10 },
+      "notes": "The trace is a fixed path, NOT audio-reactive. Never tell a client it responds to their track.",
+      "preview": { "mp4": "preview/dimensional.t1.stat.signalfield.mp4", "poster": "preview/dimensional.t1.stat.signalfield.png" }
+    },
+    {
+      "id": "dimensional.t2.proof.postfloat",
+      "tier": "tier2",
+      "purpose": "proof",
+      "file": "cards/tier2/t2-proof-postfloat.html",
+      "slots": [
+        { "name": "post1", "type": "text", "maxChars": 34 },
+        { "name": "views1", "type": "text", "maxChars": 10 },
+        { "name": "post2", "type": "text", "maxChars": 34 },
+        { "name": "views2", "type": "text", "maxChars": 10 },
+        { "name": "post3", "type": "text", "maxChars": 34 },
+        { "name": "views3", "type": "text", "maxChars": 10 }
+      ],
+      "duration": { "min": 6, "max": 14 },
+      "notes": "Transparent overlay. Keeps clear of a face guard at x 660-1260, y 300-1080. Use for the social-proof beat.",
+      "preview": { "mp4": "preview/dimensional.t2.proof.postfloat.mp4", "poster": "preview/dimensional.t2.proof.postfloat.png" }
+    }
+  ]
+}

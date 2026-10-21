@@ -1,0 +1,42 @@
+{
+  "key": "dimensional",
+  "name": "Dimensional Motion",
+  "summary": "Engineered and expensive. Chrome words and thin instrument readouts push out of real 3D depth around a cool, desaturated speaker, and real product screens float as tilted proof panels.",
+  "best_for": "Software and automation companies, tech products, fintech and premium agencies. Launches, product reveals, how-it-works and proof videos where the offer should feel like serious machinery.",
+  "why_it_works": "Motion out of depth is rare in vertical feeds, so the first 2.5s (a chrome word pushing out of the dark) reads as high production and stops the scroll. Slow, heavy entrances give each claim 1.2s to land, which raises comprehension and perceived value. Real screens floating in 3D act as proof without breaking the mood. A full takeover every 10-12s is the pattern interrupt, and the typed system-log captions make the viewer read along.",
+  "tags": [
+    "tech",
+    "product launch",
+    "3D",
+    "chrome",
+    "premium",
+    "software",
+    "engineered"
+  ],
+  "sort": 40,
+  "preview": {
+    "palette": [
+      "#050507",
+      "#FFFFFF",
+      "#79C8FF",
+      "#FF3B30",
+      "#0A84FF"
+    ],
+    "fonts": [
+      "Michroma",
+      "Manrope"
+    ],
+    "caption_sample": "> automation is live_",
+    "caption_style": "System log",
+    "transitions": [
+      "Zoom blur",
+      "Hard cuts only"
+    ],
+    "music_beds": [
+      "Synthwave / electronic",
+      "Cinematic score"
+    ],
+    "pace": 2,
+    "motion_sample": "A chrome word pushes slowly out of a dark tunnel in real perspective and settles, a thin ring readout with tick marks draws around a number, and a faint red and blue lens fringe shimmers on the edges."
+  }
+}

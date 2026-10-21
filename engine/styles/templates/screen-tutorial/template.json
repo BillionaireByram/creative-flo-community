@@ -1,0 +1,42 @@
+{
+  "key": "screen-tutorial",
+  "name": "Screen Tutorial",
+  "summary": "The screen recording leads. The view zooms to wherever the cursor is working, numbered step cards keep the viewer oriented, callouts circle the exact button, and a small face bubble keeps it human.",
+  "best_for": "Software and app founders, tool and spreadsheet educators, automation builders and onboarding teams. 30-90 second how-to-do-X-in-N-steps videos and product walkthroughs.",
+  "why_it_works": "Showing the finished result in the first 2s with a numbered promise (3 steps) is the open loop: the viewer stays to get it. Zooming to the cursor makes small UI readable on a phone, which is what keeps tutorials from being swiped. Cutting all waiting keeps a change every 2-3s, and a new step card every 8-20s is the pattern interrupt that also signals progress. The recap checklist before the CTA drives saves.",
+  "tags": [
+    "tutorial",
+    "screen recording",
+    "how-to",
+    "software",
+    "step by step",
+    "education",
+    "product demo"
+  ],
+  "sort": 90,
+  "preview": {
+    "palette": [
+      "#1F2A44",
+      "#FFFFFF",
+      "#2F6BFF",
+      "#FFE14D",
+      "#0F1626"
+    ],
+    "fonts": [
+      "Bebas Neue",
+      "Montserrat"
+    ],
+    "caption_sample": "Click Automations, then New",
+    "caption_style": "Boxed highlight",
+    "transitions": [
+      "Hard cuts only",
+      "Zoom blur"
+    ],
+    "music_beds": [
+      "Minimal lo-fi",
+      "Upbeat pop / indie"
+    ],
+    "pace": 3,
+    "motion_sample": "A mock app window zooms smoothly toward a cursor with a yellow halo, a click ring ripples, a yellow outline draws around a button, and a numbered step tag slides in from the left in tall condensed type."
+  }
+}

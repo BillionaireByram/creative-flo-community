@@ -1,0 +1,42 @@
+{
+  "key": "bold-captions",
+  "name": "Bold Caption Hustle",
+  "summary": "Giant word-by-word captions slammed onto a tight face cam, with a punch-in, colored money word or sound hit on almost every beat. The captions are the show, so it works even with the sound off.",
+  "best_for": "Motivation, sales and money educators, fitness and mindset coaches, and direct-response ads. 15-45 second hot takes, hooks and talking heads where raw attention matters more than polish.",
+  "why_it_works": "One giant word on frame 0 plus a 135% punch-in makes the first second impossible to ignore. Single-word captions are read in under 0.3s each, so sound-off viewers follow everything. A change every 0.8-1.5s (cut, punch, colored word, emoji) leaves no idle frame to swipe on. Whips, highlight bars and shakes every 5-7s act as pattern interrupts, and a promise in seconds 1-3 (watch till the end, a list count) opens the loop.",
+  "tags": [
+    "captions",
+    "high energy",
+    "punch-ins",
+    "sound effects",
+    "motivation",
+    "sales",
+    "ads"
+  ],
+  "sort": 50,
+  "preview": {
+    "palette": [
+      "#0b0b0b",
+      "#FFE14D",
+      "#22E06B",
+      "#FFFFFF",
+      "#000000"
+    ],
+    "fonts": [
+      "Anton",
+      "Manrope"
+    ],
+    "caption_sample": "STOP\nWASTING\n$1,000",
+    "caption_style": "Pop words",
+    "transitions": [
+      "Whip pan",
+      "Punch-in + flash"
+    ],
+    "music_beds": [
+      "Dark trap / drill",
+      "Upbeat pop / indie"
+    ],
+    "pace": 5,
+    "motion_sample": "Giant stroked white words pop in one at a time at chest height, the money word flashes yellow at a bigger size, the frame punches in with a white flash, then a yellow bar wipes across behind a phrase."
+  }
+}

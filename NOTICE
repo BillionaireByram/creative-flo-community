@@ -1,0 +1,21 @@
+Creative Flo
+Creative Flo, created by Byram Smith Jr. A DigitalFlo product.
+Website: https://mydigitalflo.io
+
+Copyright (c) 2026 Byram Smith Jr. / DigitalFlo (Creative Flo)
+Copyright (c) 2026 Creative Flo contributors
+
+Creative Flo is released under the MIT License. See LICENSE and engine/LICENSE.
+
+Any copy, fork, or derivative work of Creative Flo, in whole or in substantial part, must keep the
+LICENSE and NOTICE files intact, including this attribution.
+
+Upstream credits
+----------------
+- FreeFrame, by Techiebutler (MIT). The review application this project is based on.
+  https://github.com/Techiebutler/freeframe
+  Copyright (c) 2026 Techiebutler
+- The original edit-engine kit, by Nate Herk (MIT). It became engine/.
+  Copyright (c) 2026 Nate Herk
+- HyperFrames (https://github.com/heygen-com/hyperframes) and GSAP (https://gsap.com/), used for motion
+  graphics under their own licenses. See engine/THIRD_PARTY_NOTICES.md and engine/licenses/.

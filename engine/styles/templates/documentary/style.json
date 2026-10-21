@@ -1,0 +1,30 @@
+{
+  "client": "documentary",
+  "brand": "Mini Documentary",
+  "handle": "",
+  "look": "look-doc",
+  "type": "type-playfair",
+  "display": "Playfair Display",
+  "body": "Montserrat",
+  "caption": "cap-cine",
+  "transition": "leak",
+  "transition_id": "tr-leak",
+  "grade": "grade-kodak",
+  "density": "density-balanced",
+  "accent": "#D7B98C",
+  "highlight": "#F4E7D2",
+  "base": "#120D08",
+  "card": "paper",
+  "logo": "",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "tagline": "",
+  "music": [
+    "Cinematic score",
+    "Acoustic / warm",
+    "Orchestral hybrid"
+  ],
+  "pace": 4,
+  "oncam": "Mostly visuals, my voice"
+}

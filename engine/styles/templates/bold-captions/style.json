@@ -1,0 +1,29 @@
+{
+  "client": "bold-captions",
+  "brand": "Bold Caption Hustle",
+  "handle": "",
+  "look": "look-kinetic",
+  "type": "type-anton",
+  "display": "Anton",
+  "body": "Manrope",
+  "caption": "cap-pop",
+  "transition": "whip",
+  "transition_id": "tr-whip",
+  "grade": "grade-natural",
+  "density": "density-heavy",
+  "accent": "#FFE14D",
+  "highlight": "#22E06B",
+  "base": "#0b0b0b",
+  "card": "brutal",
+  "logo": "",
+  "formats": [
+    "Vertical 9:16 (Reels, TikTok, Shorts)"
+  ],
+  "tagline": "",
+  "music": [
+    "Dark trap / drill",
+    "Upbeat pop / indie"
+  ],
+  "pace": 10,
+  "oncam": "Face the whole time"
+}
